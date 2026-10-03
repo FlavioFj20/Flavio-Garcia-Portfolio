@@ -1,22 +1,22 @@
 import Image from "next/image";
-import { positioning, profile } from "@/lib/data";
+import { focusAreas, positioning, profile } from "@/lib/data";
 import photo from "@/assets/flavio-garcia.jpg";
 
 /* The photograph is the only dark object on a light page. It sits off-grid and
    bleeds past the right container edge so it reads as a printed plate rather
-   than an avatar. It is the one memorable element; everything around it stays
-   flat and quiet. */
+   than an avatar. The short index under the copy names the areas the profile
+   crosses; each row carries a small node mark as a discreet network reference. */
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-x-clip">
       <div className="container grid gap-12 pt-14 pb-16 sm:pt-20 lg:grid-cols-12 lg:items-start lg:gap-10 lg:pt-24 lg:pb-24">
         <div className="lg:col-span-6 xl:col-span-5">
-          <p className="enter" style={{ animationDelay: "40ms" }}>
-            <span className="section-label">Luanda, Angola</span>
+          <p className="enter section-label" style={{ animationDelay: "40ms" }}>
+            {profile.location}
           </p>
 
           <h1
-            className="enter mt-4 text-[clamp(2.5rem,7vw,4rem)] leading-[0.98] font-medium"
+            className="enter mt-4 text-[clamp(2.75rem,7.5vw,4.25rem)] leading-[0.96] font-medium"
             style={{ animationDelay: "100ms" }}
           >
             Software
@@ -25,22 +25,18 @@ export function Hero() {
           </h1>
 
           <p
-            className="enter mt-6 max-w-md text-[1.0625rem] leading-relaxed text-ink-2"
+            className="enter measure mt-6 text-[1.0625rem] leading-relaxed text-ink-2"
             style={{ animationDelay: "170ms" }}
           >
-            Cadete da <strong className="font-medium text-ink">42 Luanda</strong> e{" "}
-            <strong className="font-medium text-ink">
-              Técnico Médio de Informática
-            </strong>{" "}
-            pelo IPIAL Alda Lara.
+            {positioning}
           </p>
 
           <p
             className="enter measure mt-4 text-[1.0625rem] leading-relaxed text-ink-2"
             style={{ animationDelay: "220ms" }}
           >
-            Trabalho com desenvolvimento de software,{" "}
-            {positioning.join(", ").toLowerCase()}.
+            Gosto de perceber o problema antes da solução e de construir com
+            consciência do que acontece por baixo da abstração.
           </p>
 
           <div
@@ -51,18 +47,24 @@ export function Hero() {
               href={profile.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center justify-center rounded-sm bg-ink px-6 text-[0.9375rem] font-medium text-paper transition-colors duration-150 hover:bg-ink-2"
+              className="cta"
             >
               Fale comigo
               <span className="sr-only"> no WhatsApp (abre em nova aba)</span>
             </a>
-            <a
-              href="#projetos"
-              className="inline-flex min-h-12 items-center justify-center border-b border-rule-strong pb-px text-[0.9375rem] text-ink transition-colors duration-150 hover:border-accent hover:text-accent"
-            >
+            <a href="#projetos" className="text-link">
               Ver projetos
             </a>
           </div>
+
+          <ul
+            className="enter focus-list mt-12"
+            style={{ animationDelay: "340ms" }}
+          >
+            {focusAreas.map((area) => (
+              <li key={area}>{area}</li>
+            ))}
+          </ul>
         </div>
 
         <div className="enter-plate lg:col-span-6 lg:col-start-7">

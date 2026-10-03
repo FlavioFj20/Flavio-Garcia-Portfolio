@@ -1,4 +1,4 @@
-import { projects } from "@/lib/data";
+import { academic, projects } from "@/lib/data";
 
 function RepoLink({ href, name }: { href: string; name: string }) {
   return (
@@ -6,7 +6,7 @@ function RepoLink({ href, name }: { href: string; name: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group inline-flex min-h-11 items-center border-b border-rule-strong pb-px text-[0.9375rem] text-ink transition-colors duration-150 hover:border-accent hover:text-accent"
+      className="text-link group"
     >
       Repositório no GitHub
       <span className="sr-only"> de {name} (abre em nova aba)</span>
@@ -26,14 +26,14 @@ function Stack({ items }: { items: readonly string[] }) {
   );
 }
 
-/* One large project and two smaller ones. Not identical cards: the primary
-   project carries the column width and the detail, the others are compact
-   plates. Same formal object (the plate), different scale. */
+/* One large project and two smaller ones. Same formal object (the plate),
+   different scale. The academic block shows breadth without linking private
+   repositories. */
 export function Projects() {
   const { primary, secondary } = projects;
 
   return (
-    <section id="projetos" className="rule-top">
+    <section id="projetos" className="rule-top bg-surface">
       <div className="container py-[var(--section-y)]">
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-4">
@@ -44,8 +44,10 @@ export function Projects() {
           </div>
 
           <div className="lg:col-span-8">
-            <article className="plate p-6 sm:p-8">
-              <p className="text-[0.8125rem] text-accent">Backend</p>
+            <article className="plate project-card p-6 sm:p-8">
+              <p className="text-[0.8125rem] text-accent">
+                {primary.category}
+              </p>
               <h3 className="mt-2 text-[1.625rem] font-medium text-ink">
                 {primary.name}
               </h3>
@@ -75,8 +77,14 @@ export function Projects() {
 
             <div className="mt-6 grid gap-6 sm:grid-cols-2">
               {secondary.map((project) => (
-                <article key={project.name} className="plate flex flex-col p-6">
-                  <h3 className="text-[1.125rem] font-medium break-words text-ink">
+                <article
+                  key={project.name}
+                  className="plate project-card flex flex-col p-6"
+                >
+                  <p className="text-[0.75rem] text-accent">
+                    {project.category}
+                  </p>
+                  <h3 className="mt-2 text-[1.125rem] font-medium break-words text-ink">
                     {project.name}
                   </h3>
                   <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-ink-2">
@@ -92,6 +100,22 @@ export function Projects() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="mt-16 grid gap-8 border-t border-ink pt-8 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <p className="section-label">{academic.title}</p>
+            <p className="measure mt-3 text-[0.9375rem] leading-relaxed text-ink-2">
+              {academic.lead}
+            </p>
+          </div>
+          <ul className="flex flex-wrap gap-x-3 gap-y-2 lg:col-span-7 lg:col-start-6">
+            {academic.areas.map((area) => (
+              <li key={area} className="skill-tag">
+                {area}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

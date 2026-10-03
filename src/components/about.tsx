@@ -7,7 +7,7 @@ export function About() {
         <div className="lg:col-span-4">
           <p className="section-label">Sobre</p>
           <h2 className="section-title measure">
-            Formação técnica e prática, lado a lado.
+            Construo a partir dos fundamentos.
           </h2>
         </div>
 
@@ -18,7 +18,7 @@ export function About() {
             ))}
           </div>
 
-          <dl className="mt-10 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+          <dl className="mt-10 grid gap-x-10 gap-y-5 border-t border-rule pt-6 sm:grid-cols-2">
             <div>
               <dt className="text-[0.8125rem] text-ink-3">Cargo</dt>
               <dd className="mt-1 text-[0.9375rem] text-ink">{profile.role}</dd>
@@ -37,7 +37,9 @@ export function About() {
             </div>
             <div>
               <dt className="text-[0.8125rem] text-ink-3">Onde estou</dt>
-              <dd className="mt-1 text-[0.9375rem] text-ink">{profile.location}</dd>
+              <dd className="mt-1 text-[0.9375rem] text-ink">
+                {profile.location}
+              </dd>
             </div>
           </dl>
         </div>

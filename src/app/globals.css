@@ -1,28 +1,33 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Design system — "technical editorial"
-   Paper ground, ink type, hairlines. One memorable idea: the plate.
-   See AUDIT_AND_PLAN.md §6 for the reasoning behind every value here.
+   Design system — "technical editorial", with a nocturnal twin.
+   Day: a cool paper document. Night: a graphite schematic.
+   One memorable object (the plate). One accent. Motion is earned, not sprayed.
    ========================================================================== */
 
 @theme {
-  /* Surfaces */
-  --color-paper: #f6f5f2;
-  --color-paper-raised: #ffffff;
+  /* --- Semantic tokens (light values live here; night overrides below) --- */
+  --color-paper: #f2f3ee;
+  --color-surface: #ffffff;
+  --color-surface-2: #e9ebe4;
 
-  /* Ink */
-  --color-ink: #15171a;
-  --color-ink-2: #3c4147;
-  --color-ink-3: #6b7178;
+  --color-ink: #16191a;
+  --color-ink-2: #3d4340;
+  --color-ink-3: #6b716c;
 
-  /* Hairlines */
-  --color-rule: #dcd9d2;
-  --color-rule-strong: #b9b5ac;
+  --color-rule: #d5d8d0;
+  --color-rule-strong: #a9aea4;
 
-  /* Accent — used for marks and links, never as the primary CTA fill */
-  --color-accent: #0b5d52;
-  --color-accent-soft: #0b5d5214;
+  --color-accent: #0e5c4c;
+  --color-accent-soft: #0e5c4c14;
+
+  /* Fixed inverse band (contact + footer). Stays dark in both themes so the
+     accent text on it always passes contrast. */
+  --color-band: #16191a;
+  --color-band-ink: #f2f3ee;
+  --color-band-rule: #f2f3ee26;
+  --color-band-accent: #6fc7a8;
 
   --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-spectral), var(--font-plex-sans), ui-serif, Georgia, serif;
@@ -30,10 +35,51 @@
 
 @theme {
   /* Deliberately few radii. The page is a print-like system: most things are
-     square. Only the QR plate and the interactive controls are softened, and
-     not by the same amount. */
+     square. Only the QR plate and the interactive controls are softened. */
   --radius-sm: 2px;
   --radius-md: 6px;
+}
+
+/* --- Night theme: same system, own identity ----------------------------- */
+html[data-theme="dark"] {
+  --color-paper: #0f1211;
+  --color-surface: #161a18;
+  --color-surface-2: #1d2320;
+
+  --color-ink: #ecefe9;
+  --color-ink-2: #b3bab3;
+  --color-ink-3: #838b84;
+
+  --color-rule: #2a302c;
+  --color-rule-strong: #3e463f;
+
+  --color-accent: #63c3a4;
+  --color-accent-soft: #63c3a414;
+
+  --color-band: #191e1c;
+  --color-band-ink: #ecefe9;
+  --color-band-rule: #ecefe91f;
+  --color-band-accent: #6fc7a8;
+}
+
+/* No-JS / pre-hydration fallback: honour the OS when no explicit choice is set. */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --color-paper: #0f1211;
+    --color-surface: #161a18;
+    --color-surface-2: #1d2320;
+    --color-ink: #ecefe9;
+    --color-ink-2: #b3bab3;
+    --color-ink-3: #838b84;
+    --color-rule: #2a302c;
+    --color-rule-strong: #3e463f;
+    --color-accent: #63c3a4;
+    --color-accent-soft: #63c3a414;
+    --color-band: #191e1c;
+    --color-band-ink: #ecefe9;
+    --color-band-rule: #ecefe91f;
+    --color-band-accent: #6fc7a8;
+  }
 }
 
 @layer base {
@@ -48,6 +94,12 @@
     /* Motion — one short, orchestrated entrance. */
     --ease-out: cubic-bezier(0.22, 0.68, 0.35, 1);
     --dur: 460ms;
+
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
   }
 
   html {
@@ -66,6 +118,9 @@
     /* Guards against a stray wide child producing a horizontal scrollbar on
        narrow viewports. Does not mask layout bugs elsewhere. */
     overflow-x: clip;
+    transition:
+      background-color 300ms var(--ease-out),
+      color 300ms var(--ease-out);
   }
 
   h1,
@@ -98,7 +153,6 @@
     border-radius: var(--radius-sm);
   }
 
-  /* Sensible default for every interactive element, defined once. */
   a,
   button {
     touch-action: manipulation;
@@ -109,10 +163,9 @@
 @layer components {
   /* --- The plate: the one repeated formal object ------------------------
      A sharp-cornered rectangle described by two hairlines (left + bottom),
-     never a full border and never a drop shadow. The photograph, each
-     project and the QR code are all plates. */
+     never a full border and never a drop shadow. */
   .plate {
-    background-color: var(--color-paper-raised);
+    background-color: var(--color-surface);
     border-left: 1px solid var(--color-ink);
     border-bottom: 1px solid var(--color-ink);
   }
@@ -128,8 +181,6 @@
     max-width: var(--measure);
   }
 
-  /* Section header: small caps-free label, then a serif title. The label is
-     sentence case and tracked slightly — not an ALL-CAPS eyebrow. */
   .section-label {
     font-size: 0.8125rem;
     font-weight: 500;
@@ -143,7 +194,6 @@
     margin-top: 0.75rem;
   }
 
-  /* Hairline that runs the full container width. */
   .rule-top {
     border-top: 1px solid var(--color-rule);
   }
@@ -152,7 +202,269 @@
     border-bottom: 1px solid var(--color-rule);
   }
 
-  /* --- Hero entrance: the single orchestrated moment --------------------- */
+  /* --- Buttons and links ------------------------------------------------- */
+  .cta {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-ink);
+    padding-inline: 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-paper);
+    transition:
+      background-color 150ms var(--ease-out),
+      transform 150ms var(--ease-out);
+  }
+
+  .cta:hover {
+    background-color: color-mix(in oklab, var(--color-ink) 82%, var(--color-paper));
+  }
+
+  .cta:active {
+    transform: translateY(1px);
+  }
+
+  .cta-inverse {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-band-ink);
+    padding-inline: 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-band);
+    transition:
+      background-color 150ms var(--ease-out),
+      transform 150ms var(--ease-out);
+  }
+
+  .cta-inverse:hover {
+    background-color: #ffffff;
+  }
+
+  .cta-inverse:active {
+    transform: translateY(1px);
+  }
+
+  /* Animated underline: grows from the left on hover/focus, stays for the
+     current nav item. */
+  .text-link,
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    color: var(--color-ink);
+    transition: color 150ms var(--ease-out);
+  }
+
+  .text-link::after,
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.35rem;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms var(--ease-out);
+  }
+
+  .text-link:hover::after,
+  .text-link:focus-visible::after,
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .nav-link[aria-current="true"]::after {
+    transform: scaleX(1);
+  }
+
+  .nav-link {
+    color: var(--color-ink-2);
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current="true"] {
+    color: var(--color-ink);
+  }
+
+  /* --- Theme icon: pure CSS, driven by <html data-theme> ----------------- */
+  .theme-icon {
+    display: block;
+  }
+
+  .theme-icon-sun {
+    display: none;
+  }
+
+  html[data-theme="dark"] .theme-icon-sun {
+    display: block;
+  }
+
+  html[data-theme="dark"] .theme-icon-moon {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme]) .theme-icon-sun {
+      display: block;
+    }
+
+    html:not([data-theme]) .theme-icon-moon {
+      display: none;
+    }
+  }
+
+  /* --- Skill / area tags ------------------------------------------------- */
+  .skill-tag {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.55rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-ink-2);
+    transition:
+      border-color 150ms var(--ease-out),
+      color 150ms var(--ease-out),
+      background-color 150ms var(--ease-out),
+      transform 150ms var(--ease-out);
+  }
+
+  .skill-tag:hover {
+    border-color: var(--color-accent);
+    color: var(--color-ink);
+    background-color: var(--color-accent-soft);
+    transform: translateY(-1px);
+  }
+
+  /* --- Hero focus index: a small node per row, like a link in a diagram -- */
+  .focus-list {
+    display: grid;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .focus-list li {
+    position: relative;
+    border-bottom: 1px solid var(--color-rule);
+    padding: 0.55rem 0 0.55rem 1.25rem;
+    font-size: 0.9375rem;
+    color: var(--color-ink-2);
+  }
+
+  .focus-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--color-accent);
+    background-color: var(--color-paper);
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  @media (min-width: 640px) {
+    .focus-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+  }
+
+  /* --- Projects ----------------------------------------------------------- */
+  .project-card {
+    transition:
+      border-color 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+
+  .project-card:hover {
+    border-left-color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  /* --- Experience deliverables ------------------------------------------- */
+  .deliverable {
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--color-accent);
+  }
+
+  /* --- Timeline ----------------------------------------------------------- */
+  .timeline {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 1px;
+    background-color: var(--color-rule);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2.25rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.75rem;
+    top: 0.45rem;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--color-ink);
+    background-color: var(--color-paper);
+    transform: translateX(-4px) rotate(45deg);
+  }
+
+  /* The timeline fills with the accent as it is scrolled through. Defined
+     only where scroll-driven animations are supported, so other browsers keep
+     the quiet grey line. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .timeline::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.4rem;
+        width: 1px;
+        height: calc(100% - 0.8rem);
+        background-color: var(--color-accent);
+        transform-origin: top;
+        animation: timeline-grow linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 60%;
+      }
+
+      @keyframes timeline-grow {
+        from {
+          transform: scaleY(0);
+        }
+        to {
+          transform: scaleY(1);
+        }
+      }
+    }
+  }
+
+  /* --- Entering: the single orchestrated page-load moment ---------------- */
   .enter {
     opacity: 0;
     animation: enter var(--dur) var(--ease-out) forwards;
@@ -169,7 +481,6 @@
     }
   }
 
-  /* The photograph settles from a very slight overscale. */
   .enter-plate {
     opacity: 0;
     animation: enter-plate 900ms var(--ease-out) 120ms forwards;
@@ -185,17 +496,55 @@
       transform: none;
     }
   }
+
+  /* --- Mobile menu: a short, once-only entrance -------------------------- */
+  .mobile-menu {
+    animation: menu-in 220ms var(--ease-out);
+  }
+
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* --- Reveal: CSS scroll-driven, progressive enhancement only ----------- */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .reveal {
+        animation: reveal-up linear both;
+        animation-timeline: view();
+        animation-range: entry 8% cover 30%;
+      }
+
+      @keyframes reveal-up {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    }
+  }
 }
 
 @layer utilities {
   /* Numbers that carry meaning (19/20, years) align in columns. */
-  tabular {
+  .tabular {
     font-variant-numeric: tabular-nums;
   }
 }
 
 /* ==========================================================================
-   Reduced motion — kill the entrance entirely and hand back a static page.
+   Reduced motion — kill entrance and reveal entirely, hand back a static page.
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -203,7 +552,8 @@
   }
 
   .enter,
-  .enter-plate {
+  .enter-plate,
+  .reveal {
     opacity: 1;
     animation: none;
     transform: none;
