@@ -1,11 +1,14 @@
 import Image from "next/image";
 import { focusAreas, positioning, profile } from "@/lib/data";
-import photo from "@/assets/flavio-garcia.jpg";
+import photoLight from "@/assets/light.jpeg";
+import photoDark from "@/assets/dark.jpeg";
 
-/* The photograph is the only dark object on a light page. It sits off-grid and
-   bleeds past the right container edge so it reads as a printed plate rather
-   than an avatar. The short index under the copy names the areas the profile
-   crosses; each row carries a small node mark as a discreet network reference. */
+/* The photograph is the only dark object on a light page — and its lighter
+   twin on a dark one. Both are rendered; CSS swaps them with the theme, so the
+   plate always sits against the right key without any client JS. It bleeds
+   past the right container edge so it reads as a printed plate rather than an
+   avatar. The short index under the copy names the areas the profile crosses;
+   each row carries a small node mark as a discreet network reference. */
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-x-clip">
@@ -75,13 +78,22 @@ export function Hero() {
           <figure className="relative lg:-mr-[var(--gutter)]">
             <div className="plate relative aspect-4/5 overflow-hidden sm:aspect-16/10 lg:aspect-4/5">
               <Image
-                src={photo}
+                src={photoLight}
                 alt="Retrato de Flávio Garcia"
                 fill
                 priority
                 placeholder="blur"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 52vw, 44vw"
-                className="object-cover object-top"
+                className="photo photo-light object-cover object-top"
+              />
+              <Image
+                src={photoDark}
+                alt="Retrato de Flávio Garcia"
+                fill
+                loading="eager"
+                placeholder="blur"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 52vw, 44vw"
+                className="photo photo-dark object-cover object-top"
               />
             </div>
             <figcaption className="mt-3 flex items-baseline justify-between gap-4 border-l border-ink pl-3 text-[0.8125rem] text-ink-3">

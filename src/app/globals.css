@@ -321,6 +321,29 @@ html[data-theme="dark"] {
     }
   }
 
+  /* --- Hero photograph: one image per theme, swapped with no JS ---------- */
+  .photo-dark {
+    display: none;
+  }
+
+  html[data-theme="dark"] .photo-light {
+    display: none;
+  }
+
+  html[data-theme="dark"] .photo-dark {
+    display: block;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme]) .photo-light {
+      display: none;
+    }
+
+    html:not([data-theme]) .photo-dark {
+      display: block;
+    }
+  }
+
   /* --- Skill / area tags ------------------------------------------------- */
   .skill-tag {
     display: inline-flex;
@@ -526,6 +549,40 @@ html[data-theme="dark"] {
         from {
           opacity: 0;
           transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+/* --- Word reveal: section titles assemble word by word as they scroll in.
+   Pure CSS (view progress timeline), server-rendered, no client JS. The
+   per-word `--i` offset staggers words that share a line. If the browser
+   cannot take an `animation-range` with `calc`, the keyframe still resolves to
+   the final state, so the title is never left hidden. */
+@layer components {
+  .reveal-word {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .reveal-word {
+        animation: word-rise linear both;
+        animation-timeline: view();
+        animation-range:
+          entry calc(6% + var(--i, 0) * 2.4%)
+          cover calc(34% + var(--i, 0) * 2.4%);
+      }
+
+      @keyframes word-rise {
+        from {
+          opacity: 0;
+          transform: translateY(0.5em);
         }
         to {
           opacity: 1;

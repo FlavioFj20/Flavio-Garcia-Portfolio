@@ -1,4 +1,5 @@
 import { complementary, education } from "@/lib/data";
+import { RevealText } from "./reveal-text";
 
 /* A compact timeline. Técnico Médio comes first and 42 sits within the same
    sequence, so the two read as complementary steps rather than 42 as the
@@ -10,9 +11,11 @@ export function Education() {
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <p className="section-label">Formação</p>
-            <h2 className="section-title measure">
-              Duas bases, um mesmo percurso.
-            </h2>
+            <RevealText
+              as="h2"
+              className="section-title measure"
+              text="Duas bases, um mesmo percurso."
+            />
           </div>
 
           <div className="lg:col-span-7 lg:col-start-6">

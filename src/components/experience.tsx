@@ -1,4 +1,5 @@
 import { experience } from "@/lib/data";
+import { RevealText } from "./reveal-text";
 
 /* One internship, given the weight of a single considered entry. The two
    deliverables are separated so it reads as real work, not a padded card. */
@@ -12,9 +13,11 @@ export function Experience() {
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <p className="section-label">Experiência</p>
-            <h2 className="section-title measure">
-              Trabalho prático com software real.
-            </h2>
+            <RevealText
+              as="h2"
+              className="section-title measure"
+              text="Trabalho prático com software real."
+            />
           </div>
 
           <div className="lg:col-span-7 lg:col-start-6">

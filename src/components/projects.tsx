@@ -1,4 +1,5 @@
 import { academic, projects } from "@/lib/data";
+import { RevealText } from "./reveal-text";
 
 function RepoLink({ href, name }: { href: string; name: string }) {
   return (
@@ -38,9 +39,11 @@ export function Projects() {
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <p className="section-label">Projetos</p>
-            <h2 className="section-title measure">
-              Código aberto, para ler e executar.
-            </h2>
+            <RevealText
+              as="h2"
+              className="section-title measure"
+              text="Código aberto, para ler e executar."
+            />
           </div>
 
           <div className="lg:col-span-8">

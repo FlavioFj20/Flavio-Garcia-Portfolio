@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { contact, profile } from "@/lib/data";
 import { GitHubIcon, LinkedInIcon } from "./icons";
-import qrCode from "@/assets/whatsapp-qr.jpg";
+import { RevealText } from "./reveal-text";
+import qrCode from "@/assets/whatsapp-qr.png";
 
 const channels = [
   { href: profile.whatsapp, label: "WhatsApp", Icon: null },
@@ -18,9 +19,11 @@ export function Contact() {
             <p className="text-[0.8125rem] font-medium tracking-[0.08em] text-band-accent">
               Contacto
             </p>
-            <h2 className="mt-4 max-w-2xl text-[clamp(1.875rem,4.5vw,3rem)] leading-[1.08] font-medium text-band-ink">
-              {contact.title}
-            </h2>
+            <RevealText
+              as="h2"
+              className="mt-4 max-w-2xl text-[clamp(1.875rem,4.5vw,3rem)] leading-[1.08] font-medium text-band-ink"
+              text={contact.title}
+            />
             <p className="measure mt-5 text-[1.0625rem] leading-relaxed text-band-ink/80">
               {contact.body}
             </p>
@@ -55,23 +58,24 @@ export function Contact() {
             </ul>
           </div>
 
-          {/* The QR code. Served unoptimized at its original 300x300: Next's
+          {/* The QR code (600x600 PNG, generated with a pre-filled WhatsApp
+              message — see src/lib/data.ts). Served unoptimized: Next's
               resampling would soften the module edges and make it harder to
-              scan, so the browser gets the untouched original instead. Sized
-              in `em` off the caption so it scales with the type but never
-              stretches to fill the column. */}
+              scan. Sized off the caption so it scales with the type but never
+              stretches to fill the column. The white plate keeps the required
+              quiet zone even in the dark theme. */}
           <div className="lg:col-span-4 lg:col-start-9">
             <figure className="reveal w-fit rounded-md bg-paper p-4">
               <Image
                 src={qrCode}
-                alt="Código QR que abre a conversa de WhatsApp"
-                width={300}
-                height={300}
+                alt="Código QR que abre a conversa de WhatsApp com uma mensagem preparada"
+                width={600}
+                height={600}
                 unoptimized
                 placeholder="empty"
-                className="h-auto w-[10.5rem]"
+                className="h-auto w-[11rem]"
               />
-              <figcaption className="mt-3 max-w-[10.5rem] text-[0.8125rem] leading-relaxed text-ink-2">
+              <figcaption className="mt-3 max-w-[11rem] text-[0.8125rem] leading-relaxed text-ink-2">
                 {contact.qrCaption}
               </figcaption>
             </figure>

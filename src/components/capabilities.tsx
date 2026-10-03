@@ -1,4 +1,5 @@
 import { capabilities, programming } from "@/lib/data";
+import { RevealText } from "./reveal-text";
 
 /* What I can do, not just a logo wall. Each group pairs a short description
    with the tools behind it. Programming is split into two honest tiers so the
@@ -10,7 +11,11 @@ export function Capabilities() {
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <p className="section-label">Capacidades</p>
-            <h2 className="section-title measure">O que consigo construir.</h2>
+            <RevealText
+              as="h2"
+              className="section-title measure"
+              text="O que consigo construir."
+            />
           </div>
           <p className="measure self-end text-[1.0625rem] leading-relaxed text-ink-2 lg:col-span-7 lg:col-start-6">
             Organizo o trabalho por domínio, para se perceber o que está por

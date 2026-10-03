@@ -1,4 +1,5 @@
 import { networking } from "@/lib/data";
+import { RevealText } from "./reveal-text";
 
 /* Networking gets its own weighted section: foundations and practice, framed
    as something that supports development — never as a network-engineer claim.
@@ -11,7 +12,11 @@ export function Networking() {
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <p className="section-label">{networking.eyebrow}</p>
-            <h2 className="section-title measure">{networking.title}</h2>
+            <RevealText
+              as="h2"
+              className="section-title measure"
+              text={networking.title}
+            />
             <p className="measure mt-5 text-[1.0625rem] leading-relaxed text-ink-2">
               {networking.lead}
             </p>

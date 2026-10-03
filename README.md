@@ -22,7 +22,9 @@ sistemas, infraestrutura e fundamentos de redes.
 
 Sem dependências de UI, sem cliente HTTP, sem bibliotecas de animação. O
 movimento usa CSS — entrada orquestrada no hero, microinterações e
-scroll-driven reveals (`animation-timeline: view()`) com degradação segura.
+scroll-driven reveals (`animation-timeline: view()`), incluindo títulos que se
+organizam palavra a palavra ao scroll, sempre com degradação segura e respeito
+por `prefers-reduced-motion`.
 
 ## Como executar localmente
 
@@ -72,10 +74,12 @@ src/
 │   ├── experience.tsx  education.tsx  projects.tsx  contact.tsx
 │   ├── site-header.tsx  site-footer.tsx
 │   ├── theme-toggle.tsx                       # alternância de tema, client
+│   ├── reveal-text.tsx                        # título revelado por palavra
 │   └── icons.tsx
 ├── assets/
-│   ├── flavio-garcia.jpg                      # fotografia
-│   └── whatsapp-qr.jpg                        # QR de contacto
+│   ├── light.jpeg                             # fotografia (tema claro)
+│   ├── dark.jpeg                              # fotografia (tema escuro)
+│   └── whatsapp-qr.png                        # QR de contacto (mensagem pré-preenchida)
 └── lib/
     └── data.ts             # todo o conteúdo: perfil, secções, projetos
 ```
@@ -100,8 +104,15 @@ Projetos · Contacto · Footer
 
 ## Contacto
 
-O único contacto público é `https://wa.link/f5vghle`. Nenhum número de telefone
-é escrito na página, nos links, no `alt`, na metadata ou no Open Graph.
+O contacto principal é o WhatsApp, via click-to-chat para o número
+`+244 953 700 636`, já com uma mensagem pré-preenchida definida em
+`src/lib/data.ts`. O mesmo link é codificado no QR (`src/assets/whatsapp-qr.png`).
+Ao alterar a mensagem, regenera o QR:
+
+```bash
+npx qrcode -o src/assets/whatsapp-qr.png -w 600 -q 4 -e Q \
+  "https://wa.me/244953700636?text=<mensagem-url-encoded>"
+```
 
 ## Deploy na Vercel
 

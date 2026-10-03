@@ -1,4 +1,5 @@
 import { about, profile } from "@/lib/data";
+import { RevealText } from "./reveal-text";
 
 export function About() {
   return (
@@ -6,9 +7,11 @@ export function About() {
       <div className="container grid gap-10 py-[var(--section-y)] lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
           <p className="section-label">Sobre</p>
-          <h2 className="section-title measure">
-            Construo a partir dos fundamentos.
-          </h2>
+          <RevealText
+            as="h2"
+            className="section-title measure"
+            text="Construo a partir dos fundamentos."
+          />
         </div>
 
         <div className="lg:col-span-7 lg:col-start-6">

@@ -2,15 +2,22 @@
    Nothing here is invented: each entry was checked against the real repo,
    the real CV facts, or a live HTTP request. See AUDIT_AND_PLAN.md. */
 
+/* WhatsApp click-to-chat. The old short link (wa.link/f5vghle) is dead — it
+   resolves to oops.wa.link (see AUDIT_AND_PLAN.md) — so the profile now uses
+   the number directly. The pre-filled message gives the visitor a clear intent
+   and spares them from writing the first line. Keep this in sync with the QR
+   image at src/assets/whatsapp-qr.png. */
+const whatsappNumber = "244953700636";
+const whatsappMessage =
+  "Olá, Flávio! Vi o seu portfólio e gostaria de falar sobre uma oportunidade.";
+
 export const profile = {
   name: "Flávio Garcia",
   role: "Software Developer",
   location: "Luanda, Angola",
   github: "https://github.com/FlavioFj20",
   linkedin: "https://ao.linkedin.com/in/fl%C3%A1vio-garcia-1b63aa368",
-  /* Brief §16/17/34: the only public contact is this exact link. No phone
-     number may appear in the markup, metadata or link hrefs. */
-  whatsapp: "https://wa.link/f5vghle",
+  whatsapp: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
 } as const;
 
 export const positioning =
@@ -284,5 +291,5 @@ export const contact = {
   title: "Tem uma ideia, um sistema para construir ou uma oportunidade para conversar?",
   body: "Estou aberto a projetos, colaboração e oportunidades onde possa contribuir e continuar a evoluir. O WhatsApp é o canal mais direto.",
   cta: "Fale comigo",
-  qrCaption: "Escaneie para falar comigo no WhatsApp.",
+  qrCaption: "Escaneie para abrir o WhatsApp com uma mensagem já preparada.",
 } as const;
