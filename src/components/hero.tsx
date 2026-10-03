@@ -8,7 +8,7 @@ import photo from "@/assets/flavio-garcia.jpg";
    flat and quiet. */
 export function Hero() {
   return (
-    <section id="topo" className="relative">
+    <section id="topo" className="relative overflow-x-clip">
       <div className="container grid gap-12 pt-14 pb-16 sm:pt-20 lg:grid-cols-12 lg:items-start lg:gap-10 lg:pt-24 lg:pb-24">
         <div className="lg:col-span-6 xl:col-span-5">
           <p className="enter" style={{ animationDelay: "40ms" }}>
@@ -66,7 +66,11 @@ export function Hero() {
         </div>
 
         <div className="enter-plate lg:col-span-6 lg:col-start-7">
-          <figure className="relative lg:-mr-[calc(var(--gutter)+2.5rem)] xl:-mr-[4rem]">
+          {/* The bleed is capped at the container's own gutter so the plate can
+              never reach past the viewport edge. `100vw` is deliberately
+              avoided: it includes the scrollbar and is the usual cause of a
+              stray horizontal scrollbar. */}
+          <figure className="relative lg:-mr-[var(--gutter)]">
             <div className="plate relative aspect-4/5 overflow-hidden sm:aspect-16/10 lg:aspect-4/5">
               <Image
                 src={photo}
@@ -74,7 +78,7 @@ export function Hero() {
                 fill
                 priority
                 placeholder="blur"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 52vw, 44vw"
                 className="object-cover object-top"
               />
             </div>

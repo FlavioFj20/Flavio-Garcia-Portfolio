@@ -57,7 +57,7 @@ export function SiteHeader() {
         <a
           href="#topo"
           onClick={() => setOpen(false)}
-          className="font-display text-[1.0625rem] font-medium tracking-tight text-ink"
+          className="inline-flex min-h-11 items-center font-display text-[1.0625rem] font-medium tracking-tight text-ink"
         >
           {profile.name}
         </a>
