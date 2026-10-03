@@ -1,107 +1,188 @@
+/* Single source of truth for every word and link on the page.
+   Nothing here is invented: each entry was checked against the real repo,
+   the real CV facts, or a live HTTP request. See AUDIT_AND_PLAN.md. */
+
 export const profile = {
   name: "Flávio Garcia",
-  initials: "FG",
-  role: "Software Engineering Student & Developer",
+  role: "Software Developer",
   location: "Luanda, Angola",
   github: "https://github.com/FlavioFj20",
-  linkedin:
-    "https://ao.linkedin.com/in/fl%C3%A1vio-garcia-1b63aa368",
+  linkedin: "https://ao.linkedin.com/in/fl%C3%A1vio-garcia-1b63aa368",
+  /* Verified by decoding the shipped QR image and by resolving the redirect:
+     wa.link/f5vghl opens a chat. (The variant with a trailing "e" is a dead
+     "oops wrong link" page — do not reintroduce it.) */
+  whatsapp: "https://wa.link/f5vghl",
 } as const;
 
 export type NavItem = { href: string; label: string };
 
-export const navigation: NavItem[] = [
+export const navigation: readonly NavItem[] = [
   { href: "#sobre", label: "Sobre" },
-  { href: "#competencias", label: "Competências" },
+  { href: "#capacidades", label: "Capacidades" },
+  { href: "#experiencia", label: "Experiência" },
   { href: "#projetos", label: "Projetos" },
-  { href: "#academia", label: "42 Luanda" },
   { href: "#contacto", label: "Contacto" },
 ];
 
-export const socialLinks = [
-  { href: profile.github, label: "GitHub" },
-  { href: profile.linkedin, label: "LinkedIn" },
-] as const;
+/* Short factual line used in the hero. Plain sentence in the markup; this is
+   just the noun list. */
+export const positioning: readonly string[] = [
+  "backend",
+  "Linux e Docker",
+  "bases de dados",
+];
+
+export const about: readonly string[] = [
+  "Sou Cadete da 42 Luanda e Técnico Médio de Informática pelo Instituto Médio Politécnico Alda Lara. A minha formação combina programação, desenvolvimento web, bases de dados, sistemas e fundamentos de redes de computadores.",
+  "Ao longo da formação tenho trabalhado em projetos práticos com diferentes linguagens e ambientes, o que me deu a capacidade de analisar problemas, construir soluções e aprender novas tecnologias de forma autónoma.",
+];
+
+export type CapabilityGroup = {
+  title: string;
+  items: readonly string[];
+};
+
+/* Grouped, not a logo wall. No levels, no percentages, no "expert". */
+export const capabilities: readonly CapabilityGroup[] = [
+  { title: "Programação", items: ["C", "C++", "JavaScript", "TypeScript", "Python", "PHP"] },
+  {
+    title: "Backend",
+    items: ["Node.js", "NestJS", "Express", "REST APIs", "TypeORM", "Validação por DTO"],
+  },
+  { title: "Web", items: ["HTML", "CSS", "Bootstrap", "JavaScript"] },
+  { title: "Bases de dados", items: ["MySQL", "MariaDB", "SQL", "Modelação de dados"] },
+  { title: "Sistemas e infra-estrutura", items: ["Linux", "Docker", "Docker Compose", "Nginx", "Redis"] },
+  { title: "Ferramentas", items: ["Git", "GitHub", "VS Code", "MySQL Workbench", "XAMPP"] },
+];
+
+/* Brief §9: networking gets a real, visible presence — as foundations, never
+   as a claim of being a network engineer. */
+export const networking = {
+  title: "Fundamentos de redes",
+  lead: "Base de redes de computadores, com prática de laboratório em Cisco.",
+  items: [
+    "TCP/IP",
+    "Modelo OSI",
+    "Subnetting",
+    "Endereçamento IP",
+    "Troubleshooting",
+    "Prática de laboratório em Cisco",
+    "Windows Server",
+  ],
+} as const;
+
+export type Experience = {
+  org: string;
+  role: string;
+  period: string;
+  body: readonly string[];
+  stack: readonly string[];
+  note?: { label: string; value: string };
+};
+
+/* Internship, not employment. No invented title, no invented duties. */
+export const experience: readonly Experience[] = [
+  {
+    org: "Diamante & Sandson",
+    role: "Estágio",
+    period: "",
+    body: [
+      "Participei no desenvolvimento de um sistema de gestão para restaurante e colaboradores e de um website público para apresentação do negócio.",
+      "Trabalhei na modelação da base de dados e na integração entre a aplicação e a base de dados.",
+    ],
+    stack: [
+      "HTML",
+      "CSS",
+      "Bootstrap",
+      "JavaScript",
+      "PHP",
+      "MySQL",
+      "MySQL Workbench",
+      "XAMPP",
+      "VS Code",
+    ],
+    note: { label: "Avaliação", value: "19 / 20" },
+  },
+];
+
+export type Education = {
+  org: string;
+  course: string;
+  period: string;
+  body: string;
+};
+
+/* Order is deliberate: the technical course is the broader base, and 42 sits
+   within it. Brief §30 — 42 must not read as the sole differentiator. */
+export const education: readonly Education[] = [
+  {
+    org: "Instituto Médio Politécnico Alda Lara",
+    course: "Técnico Médio em Informática",
+    period: "Concluído em 2025",
+    body: "Formação técnica em informática, programação, bases de dados, sistemas e desenvolvimento de aplicações.",
+  },
+  {
+    org: "42 Luanda",
+    course: "Cadete",
+    period: "Desde maio de 2025",
+    body: "Formação prática baseada em projetos, peer learning e resolução de problemas, com foco em programação, sistemas, algoritmos e desenvolvimento de software.",
+  },
+];
+
+/* Complementary study. No invented dates, grades or certificates. */
+export const complementary: readonly string[] = [
+  "VIMAC — Corporate Networks",
+  "Open English — Career Development",
+  "Boot.dev — Python Basics",
+  "Frontend Masters — Complete Intro to Node.js",
+  "Frontend Masters — Hard Parts of Servers & Node.js",
+];
 
 export type Project = {
   name: string;
   href: string;
-  category: string;
-  description: string;
-  technologies?: readonly string[];
-  featured?: boolean;
+  summary: string;
+  detail: readonly string[];
+  stack: readonly string[];
 };
 
-export const projects: Project[] = [
-  {
-    name: "Intro Node.js",
+/* Descriptions checked against each repository's actual source on 2026-10-03. */
+export const projects: {
+  primary: Project;
+  secondary: readonly Project[];
+} = {
+  primary: {
+    name: "intro_nodejs",
     href: "https://github.com/FlavioFj20/intro_nodejs",
-    category: "Backend / Node.js",
-    description:
-      "Projeto de aprendizagem em Node.js que combina uma CLI para gestão de notas com uma interface web simples, trabalhando manipulação de ficheiros, persistência local, servidor HTTP e organização modular.",
-    technologies: ["Node.js", "JavaScript", "CLI", "HTTP", "JSON"],
-    featured: true,
+    summary: "Gestor de notas em Node.js, com interface de linha de comandos e leitura no navegador.",
+    detail: [
+      "A CLI (yargs) cria, lista, pesquisa, remove e limpa notas; cada nota tem id, texto e tags.",
+      "As notas são persistidas em bd.json por um módulo de acesso a dados separado.",
+      "Um servidor HTTP sem dependências serve uma vista das notas no navegador.",
+    ],
+    stack: ["Node.js", "JavaScript (ESM)", "yargs", "HTTP", "JSON", "CLI"],
   },
-  {
-    name: "Calculator with History",
-    href: "https://github.com/FlavioFj20/calculator_with_history",
-    category: "Frontend Development",
-    description:
-      "Calculadora desenvolvida com HTML, CSS e JavaScript, incluindo histórico de operações e interface responsiva.",
-    technologies: ["HTML", "CSS", "JavaScript"],
-  },
-  {
-    name: "Página de Receita",
-    href: "https://github.com/FlavioFj20/pagina_de_receita",
-    category: "Web Development",
-    description:
-      "Projeto web focado na construção de uma página de apresentação de receita, trabalhando estrutura semântica, organização visual e desenvolvimento de interface.",
-  },
-];
-
-export type SkillGroup = {
-  title: string;
-  level: "Working with" | "Experience with" | "Familiar with";
-  note: string;
-  items: readonly string[];
+  secondary: [
+    {
+      name: "calculator_with_history",
+      href: "https://github.com/FlavioFj20/calculator_with_history",
+      summary: "Calculadora em HTML, CSS e JavaScript, sem bibliotecas, com histórico de operações.",
+      detail: [
+        "Operadores + − × ÷ %, limpar e apagar o último carácter.",
+        "Histórico de cálculos construído com manipulação do DOM.",
+        "Layout responsivo com Flexbox, Grid, clamp() e unidades relativas.",
+      ],
+      stack: ["HTML", "CSS", "JavaScript"],
+    },
+    {
+      name: "pagina_de_receita",
+      href: "https://github.com/FlavioFj20/pagina_de_receita",
+      summary: "Página estática de receita, em HTML e CSS, com secções semânticas.",
+      detail: [
+        "Secções de descrição, ingredientes e modo de preparo.",
+        "Tipografia serifada e imagem de destaque.",
+      ],
+      stack: ["HTML", "CSS"],
+    },
+  ],
 };
-
-export const skillGroups: SkillGroup[] = [
-  {
-    title: "Languages",
-    level: "Working with",
-    note: "Uso diário em exercícios, projetos de avaliação e projetos pessoais.",
-    items: ["C", "C++", "JavaScript", "TypeScript", "Python", "PHP"],
-  },
-  {
-    title: "Backend / Web",
-    level: "Experience with",
-    note: "Aplicado em projetos de frontend e backend, incluindo Node.js.",
-    items: ["Node.js", "NestJS", "REST APIs", "HTML", "CSS", "Bootstrap"],
-  },
-  {
-    title: "Tools / Infrastructure",
-    level: "Familiar with",
-    note: "Utilizados para versionamento, ambiente de trabalho e estrutura de serviços.",
-    items: ["Git", "GitHub", "Linux", "Docker", "Docker Compose", "MySQL / MariaDB"],
-  },
-];
-
-export const academicTopics: readonly string[] = [
-  "C e C++",
-  "Linux",
-  "Programação de baixo nível",
-  "Algoritmos",
-  "Estruturas de dados",
-  "Debugging",
-  "Redes",
-  "Docker",
-  "Desenvolvimento de sistemas",
-];
-
-export const facts: readonly { label: string; value: string }[] = [
-  { label: "Formação", value: "42 Luanda — Finalista" },
-  { label: "Foco atual", value: "Backend & Web" },
-  { label: "Modelo", value: "Aprendizagem prática, peer-to-peer" },
-  { label: "Base", value: "Luanda, Angola" },
-];
