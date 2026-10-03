@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { navigation, profile } from "@/lib/data";
 import { CloseIcon, MenuIcon } from "./icons";
+import { ThemeToggle } from "./theme-toggle";
 
-/* The only client component on the page. It exists for the mobile disclosure
-   and the section highlight; nothing else ships JavaScript.
-   Deliberately no scroll listener and no backdrop blur — the bar is solid
-   paper with a hairline, so there is no state to track while scrolling. */
+/* The mobile disclosure and the section highlight are the only JavaScript on
+   the page. The bar is solid paper with a hairline, so there is no scroll
+   state to track and no backdrop blur. */
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
@@ -53,7 +53,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-rule bg-paper">
-      <div className="container flex h-16 items-center justify-between gap-6">
+      <div className="container flex h-16 items-center justify-between gap-4">
         <a
           href="#topo"
           onClick={() => setOpen(false)}
@@ -62,16 +62,14 @@ export function SiteHeader() {
           {profile.name}
         </a>
 
-        <nav aria-label="Navegação principal" className="hidden md:block">
-          <ul className="flex items-center gap-7">
+        <nav aria-label="Navegação principal" className="hidden lg:block">
+          <ul className="flex items-center gap-6">
             {navigation.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
                   aria-current={active === item.href ? "true" : undefined}
-                  className={`inline-flex min-h-11 items-center text-[0.9375rem] transition-colors duration-150 hover:text-ink ${
-                    active === item.href ? "text-accent" : "text-ink-2"
-                  }`}
+                  className="nav-link px-1 text-[0.9375rem]"
                 >
                   {item.label}
                 </a>
@@ -80,16 +78,18 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <a
             href={profile.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden min-h-11 items-center rounded-sm bg-ink px-4 text-[0.9375rem] font-medium text-paper transition-colors duration-150 hover:bg-ink-2 sm:inline-flex"
+            className="cta hidden sm:inline-flex"
           >
             Fale comigo
             <span className="sr-only"> no WhatsApp (abre em nova aba)</span>
           </a>
+
+          <ThemeToggle />
 
           <button
             type="button"
@@ -97,7 +97,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="menu-mobile"
             aria-label={open ? "Fechar menu" : "Abrir menu"}
-            className="inline-flex size-11 items-center justify-center rounded-sm text-ink transition-colors duration-150 hover:bg-paper-raised md:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-sm text-ink transition-colors duration-150 hover:bg-surface-2 lg:hidden"
           >
             {open ? (
               <CloseIcon className="size-5" />
@@ -108,38 +108,39 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div
-        id="menu-mobile"
-        hidden={!open}
-        className="border-t border-rule bg-paper md:hidden"
-      >
-        <nav aria-label="Navegação principal (mobile)">
-          <ul className="container flex flex-col py-2">
-            {navigation.map((item) => (
-              <li key={item.href}>
+      {open ? (
+        <div
+          id="menu-mobile"
+          className="mobile-menu border-t border-rule bg-paper lg:hidden"
+        >
+          <nav aria-label="Navegação principal (mobile)">
+            <ul className="container flex flex-col py-2">
+              {navigation.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="flex min-h-12 items-center border-b border-rule text-[1.0625rem] text-ink transition-colors duration-150 hover:text-accent"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+              <li className="py-4">
                 <a
-                  href={item.href}
+                  href={profile.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
-                  className="flex min-h-12 items-center border-b border-rule text-[1.0625rem] text-ink transition-colors duration-150 last:border-b-0 hover:text-accent"
+                  className="cta w-full"
                 >
-                  {item.label}
+                  Fale comigo
                 </a>
               </li>
-            ))}
-            <li className="py-4">
-              <a
-                href={profile.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-ink px-4 font-medium text-paper"
-              >
-                Fale comigo no WhatsApp
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+            </ul>
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }
