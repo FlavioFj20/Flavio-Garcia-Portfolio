@@ -11,7 +11,7 @@ export const profile = {
   /* Verified by decoding the shipped QR image and by resolving the redirect:
      wa.link/f5vghl opens a chat. (The variant with a trailing "e" is a dead
      "oops wrong link" page — do not reintroduce it.) */
-  whatsapp: "https://wa.link/f5vghl",
+  whatsapp: "https://wa.me/244953700636",
 } as const;
 
 export type NavItem = { href: string; label: string };
