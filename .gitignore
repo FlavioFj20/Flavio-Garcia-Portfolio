@@ -44,6 +44,7 @@ next-env.d.ts
 
 # internal working documents and local agent tooling (not part of the site)
 /AUDIT_AND_PLAN.md
+/AGENT_CONTEXT.md
 /agent_instructions.md
 /.agents/
 /agent/

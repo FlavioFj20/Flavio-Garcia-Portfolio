@@ -1,9 +1,9 @@
-# Portefólio — Flávio Garcia
+# Portfólio — Flávio Garcia
 
-Portefólio pessoal de [Flávio Garcia](https://github.com/FlavioFj20), finalista da
-42 Luanda e desenvolvedor de software. Landing page de página única, estática,
-construída para apresentar o perfil a clientes, parceiros e recrutadores em
-segundos.
+Portefólio pessoal de [Flávio Garcia](https://github.com/FlavioFj20), Software
+Developer em Luanda. Página única, estática, que apresenta o perfil a clientes,
+parceiros e recrutadores: desenvolvimento web e backend, bases de dados,
+sistemas, infraestrutura e fundamentos de redes.
 
 **Live:** [https://flavio-portfolio.vercel.app](https://flavio-portfolio.vercel.app)
 
@@ -11,17 +11,18 @@ segundos.
 
 ## Stack
 
-| Camada        | Tecnologia                                  |
-| ------------- | ------------------------------------------- |
-| Framework     | Next.js 16 (App Router)                     |
-| Linguagem     | TypeScript                                  |
-| Styling       | Tailwind CSS 4                              |
-| Ícones        | SVG próprios (sem bibliotecas de ícones)   |
-| Fontes        | `next/font` (Geist, Geist Mono, Instrument Sans) |
-| Animações     | CSS + `IntersectionObserver` (sem bibliotecas) |
+| Camada    | Tecnologia                                        |
+| --------- | ------------------------------------------------- |
+| Framework | Next.js 16 (App Router)                           |
+| Linguagem | TypeScript                                        |
+| Styling   | Tailwind CSS 4 (tokens semânticos em `@theme`)    |
+| Ícones    | SVG próprios (sem bibliotecas de ícones)          |
+| Fontes    | `next/font` (Spectral + IBM Plex Sans)            |
+| Tema      | Light + dark, tokens CSS, sem flash (`next/script`) |
 
-Sem dependências de UI, sem cliente HTTP, sem carrossel. Nenhuma biblioteca
-extra foi adicionada para além do que o Next.js e o Tailwind já exigem.
+Sem dependências de UI, sem cliente HTTP, sem bibliotecas de animação. O
+movimento usa CSS — entrada orquestrada no hero, microinterações e
+scroll-driven reveals (`animation-timeline: view()`) com degradação segura.
 
 ## Como executar localmente
 
@@ -36,12 +37,12 @@ Abre em <http://localhost:3000>.
 
 ### Scripts
 
-| Comando           | Descrição                                  |
-| ----------------- | ------------------------------------------ |
-| `npm run dev`     | Servidor de desenvolvimento                |
-| `npm run build`   | Build de produção                          |
-| `npm run start`   | Serve o build de produção                  |
-| `npm run lint`    | ESLint (`eslint-config-next`)              |
+| Comando         | Descrição                   |
+| --------------- | --------------------------- |
+| `npm run dev`   | Servidor de desenvolvimento |
+| `npm run build` | Build de produção           |
+| `npm run start` | Serve o build de produção   |
+| `npm run lint`  | ESLint (`eslint-config-next`) |
 
 ### Variáveis de ambiente
 
@@ -52,61 +53,59 @@ NEXT_PUBLIC_SITE_URL=https://o-dominio-real.com
 ```
 
 É usada em `metadataBase` (Open Graph, canonical), `robots.txt` e
-`sitemap.xml`. Sem esta variável o site assume
-`https://flavio-portfolio.vercel.app`.
+`sitemap.xml`. Sem esta variável o site assume `http://localhost:3000`.
 
 ## Estrutura
 
 ```
 src/
 ├── app/
-│   ├── layout.tsx            # metadata, fontes, header/footer, skip link
+│   ├── layout.tsx            # metadata, fontes, script de tema, header/footer
 │   ├── page.tsx              # composição das secções
-│   ├── globals.css           # design tokens, base, animação de reveal
-│   ├── icon.svg              # favicon
+│   ├── globals.css           # tokens light/dark, base, componentes, motion
+│   ├── icon.svg              # favicon (claro/escuro)
 │   ├── opengraph-image.tsx   # imagem Open Graph (1200×630, gerada)
 │   ├── robots.ts
 │   └── sitemap.ts
 ├── components/
-│   ├── about.tsx  academic.tsx  contact.tsx  hero.tsx
-│   ├── projects.tsx  skills.tsx
-│   ├── site-header.tsx  site-footer.tsx        # header é client (menu móvel)
-│   ├── reveal-observer.tsx                     # scroll reveal, client
-│   ├── buttons.tsx  icons.tsx  section-heading.tsx  social-links.tsx
+│   ├── hero.tsx  about.tsx  capabilities.tsx  networking.tsx
+│   ├── experience.tsx  education.tsx  projects.tsx  contact.tsx
+│   ├── site-header.tsx  site-footer.tsx
+│   ├── theme-toggle.tsx                       # alternância de tema, client
+│   └── icons.tsx
+├── assets/
+│   ├── flavio-garcia.jpg                      # fotografia
+│   └── whatsapp-qr.jpg                        # QR de contacto
 └── lib/
-    └── data.ts             # todo o conteúdo: perfil, projetos, competências
+    └── data.ts             # todo o conteúdo: perfil, secções, projetos
 ```
 
 Todo o conteúdo textual vive em `src/lib/data.ts`, por isso editar textos ou
-trocar links não exige mexer nos componentes.
+trocar links não exige mexer nos componentes. Os únicos client components são
+`site-header.tsx` (menu móvel + secção ativa) e `theme-toggle.tsx`.
 
 ## Secções
 
-Hero · Sobre · Competências · Projetos · 42 Luanda · Contacto · Footer
+Hero · Sobre · Capacidades · Networking & Systems · Experiência · Formação ·
+Projetos · Contacto · Footer
 
-## Decisões técnicas
+## Tema light / dark
 
-- **Estático por padrão.** Todas as rotas são pré-renderizadas (`○` no output
-  do build); não há server components assíncronos nem chamadas de rede em
-  runtime.
-- **Sem imagens pesadas.** Nenhum bitmap no repositório: o mockup do projeto em
-  destaque é construído com ícones SVG próprios e a imagem Open Graph é gerada
-  em build por `next/og`.
-- **Scroll reveal com degradação segura.** Os elementos com `data-reveal`
-  começam invisíveis e são revelados por `IntersectionObserver`. Se o JS não
-  carregar, ou se `prefers-reduced-motion: reduce` estiver ativo, ficam
-  visíveis — o conteúdo nunca fica preso atrás de uma animação.
-- **Alinhamento com o cabeçalho fixo.** As secções usam `scroll-margin-top`, o
-  que evita que o título fique escondido atrás da navegação ao usar links
-  internos.
-- **Acessibilidade.** Landmarks semânticos, ordem de headings coerente, foco
-  visível em todos os elementos interativos, contraste mínimo verificado de
-  7.5:1 e alvos de toque de 36–40 px.
+- Tokens semânticos (`paper`, `surface`, `ink`, `rule`, `accent`, `band`) com
+  valores distintos por tema — não é uma inversão de cores.
+- A escolha persiste em `localStorage` e, na primeira visita, segue
+  `prefers-color-scheme`.
+- Um script inline (`beforeInteractive`) resolve o tema antes da primeira
+  pintura, evitando flash.
+
+## Contacto
+
+O único contacto público é `https://wa.link/f5vghle`. Nenhum número de telefone
+é escrito na página, nos links, no `alt`, na metadata ou no Open Graph.
 
 ## Deploy na Vercel
 
-O projeto usa Next.js puro, por isso não é necessária qualquer configuração
-adicional. Duas opções:
+Next.js puro; não é necessária configuração adicional. Duas opções:
 
 **Pela CLI**
 
@@ -116,21 +115,20 @@ vercel            # preview
 vercel --prod     # produção
 ```
 
-Na primeira execução, define `NEXT_PUBLIC_SITE_URL` para o domínio atribuído.
+Define `NEXT_PUBLIC_SITE_URL` para o domínio atribuído.
 
 **Pela interface**
 
 1. Importa o repositório em <https://vercel.com/new>.
-2. O framework é detetado automaticamente; não mexas no Build Command
-   (`npm run build`) nem no Output Directory.
+2. O framework é detetado automaticamente.
 3. Adiciona a variável de ambiente `NEXT_PUBLIC_SITE_URL`.
 4. Faz deploy.
 
 ## Repositórios apresentados
 
-- [pagina_de_receita](https://github.com/FlavioFj20/pagina_de_receita)
-- [calculator_with_history](https://github.com/FlavioFj20/calculator_with_history)
 - [intro_nodejs](https://github.com/FlavioFj20/intro_nodejs)
+- [calculator_with_history](https://github.com/FlavioFj20/calculator_with_history)
+- [pagina_de_receita](https://github.com/FlavioFj20/pagina_de_receita)
 
 ## Licença
 
