@@ -21,7 +21,7 @@ export function Contact() {
             <h2 className="mt-4 max-w-xl text-[clamp(1.875rem,4.5vw,3rem)] leading-[1.08] font-medium text-paper">
               Se tem um sistema ou um site para construir, escreva-me.
             </h2>
-            <p className="measure mt-5 text-[1.0625rem] leading-relaxed text-paper/70">
+            <p className="measure mt-5 text-[1.0625rem] leading-relaxed text-paper/80">
               Respondo pelo WhatsApp. É o canal mais rápido.
             </p>
 
@@ -55,12 +55,14 @@ export function Contact() {
             </ul>
           </div>
 
-          {/* The QR code. Served unoptimized: resampling a QR degrades the
-              module edges and makes it harder to scan, so the browser gets
-              the original 300×300 pixels untouched. The written link beside it
-              means a failed scan is never a dead end. */}
+          {/* The QR code. Served unoptimized at its original 300x300: Next's
+              resampling would soften the module edges and make it harder to
+              scan, so the browser gets the untouched original instead. Sized
+              in `em` off the caption so it scales with the type but never
+              stretches to fill the column. The written link beside it means a
+              failed scan is never a dead end. */}
           <div className="lg:col-span-4 lg:col-start-9">
-            <figure className="rounded-md bg-paper p-4">
+            <figure className="w-fit rounded-md bg-paper p-4">
               <Image
                 src={qrCode}
                 alt="Código QR que abre a conversa de WhatsApp"
@@ -68,9 +70,9 @@ export function Contact() {
                 height={300}
                 unoptimized
                 placeholder="empty"
-                className="size-full"
+                className="h-auto w-[10.5rem]"
               />
-              <figcaption className="mt-3 text-[0.8125rem] leading-relaxed text-ink-2">
+              <figcaption className="mt-3 max-w-[10.5rem] text-[0.8125rem] leading-relaxed text-ink-2">
                 Aponte a câmara para abrir a conversa no WhatsApp.
               </figcaption>
             </figure>
