@@ -1,83 +1,88 @@
-import { profile } from "@/lib/data";
-import { AnchorLink } from "./buttons";
-import { SocialLinks } from "./social-links";
-import { ArrowRightIcon } from "./icons";
+import Image from "next/image";
+import { positioning, profile } from "@/lib/data";
+import photo from "@/assets/flavio-garcia.jpg";
 
+/* The photograph is the only dark object on a light page. It sits off-grid and
+   bleeds past the right container edge so it reads as a printed plate rather
+   than an avatar. It is the one memorable element; everything around it stays
+   flat and quiet. */
 export function Hero() {
   return (
-    <section
-      id="topo"
-      className="relative isolate overflow-hidden pt-28 pb-20 sm:pt-32 lg:pt-40 lg:pb-28"
-    >
-      <div aria-hidden="true" className="bg-grid pointer-events-none absolute inset-0 -z-10" />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[30rem] w-[52rem] max-w-[130%] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.12),transparent_62%)] blur-2xl"
-      />
+    <section id="topo" className="relative">
+      <div className="container grid gap-12 pt-14 pb-16 sm:pt-20 lg:grid-cols-12 lg:items-start lg:gap-10 lg:pt-24 lg:pb-24">
+        <div className="lg:col-span-6 xl:col-span-5">
+          <p className="enter" style={{ animationDelay: "40ms" }}>
+            <span className="section-label">Luanda, Angola</span>
+          </p>
 
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <p
-          data-reveal
-          style={{ "--reveal-delay": "40ms" } as React.CSSProperties}
-          className="flex items-center gap-2.5 font-mono text-[0.7rem] tracking-[0.16em] text-muted uppercase sm:text-xs"
-        >
-          <span
-            aria-hidden="true"
-            className="h-1.5 w-1.5 rounded-full bg-accent"
-          />
-          {profile.role}
-        </p>
+          <h1
+            className="enter mt-4 text-[clamp(2.5rem,7vw,4rem)] leading-[0.98] font-medium"
+            style={{ animationDelay: "100ms" }}
+          >
+            Software
+            <br />
+            Developer
+          </h1>
 
-        <p
-          data-reveal
-          style={{ "--reveal-delay": "110ms" } as React.CSSProperties}
-          className="mt-7 text-base font-medium text-muted-strong sm:text-lg"
-        >
-          Olá, sou {profile.name}.
-        </p>
+          <p
+            className="enter mt-6 max-w-md text-[1.0625rem] leading-relaxed text-ink-2"
+            style={{ animationDelay: "170ms" }}
+          >
+            Cadete da <strong className="font-medium text-ink">42 Luanda</strong> e{" "}
+            <strong className="font-medium text-ink">
+              Técnico Médio de Informática
+            </strong>{" "}
+            pelo IPIAL Alda Lara.
+          </p>
 
-        <h1
-          data-reveal
-          style={{ "--reveal-delay": "180ms" } as React.CSSProperties}
-          className="mt-3 max-w-3xl text-[2rem] leading-[1.1] font-semibold text-fg sm:text-[2.75rem] lg:text-[3.5rem]"
-        >
-          Software Developer focado em{" "}
-          <span className="text-accent">construir soluções úteis</span>.
-        </h1>
+          <p
+            className="enter measure mt-4 text-[1.0625rem] leading-relaxed text-ink-2"
+            style={{ animationDelay: "220ms" }}
+          >
+            Trabalho com desenvolvimento de software,{" "}
+            {positioning.join(", ").toLowerCase()}.
+          </p>
 
-        <p
-          data-reveal
-          style={{ "--reveal-delay": "250ms" } as React.CSSProperties}
-          className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
-        >
-          Finalista da 42 Luanda, com experiência prática em desenvolvimento de
-          software, backend e aplicações web.
-        </p>
-
-        <div
-          data-reveal
-          style={{ "--reveal-delay": "320ms" } as React.CSSProperties}
-          className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-        >
-          <AnchorLink href="#projetos" size="lg" variant="primary">
-            Ver projetos
-            <ArrowRightIcon className="h-4 w-4" />
-          </AnchorLink>
-
-          <AnchorLink href="#contacto" size="lg" variant="secondary">
-            Entrar em contacto
-          </AnchorLink>
+          <div
+            className="enter mt-9 flex flex-wrap items-center gap-x-6 gap-y-3"
+            style={{ animationDelay: "290ms" }}
+          >
+            <a
+              href={profile.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center rounded-sm bg-ink px-6 text-[0.9375rem] font-medium text-paper transition-colors duration-150 hover:bg-ink-2"
+            >
+              Fale comigo
+              <span className="sr-only"> no WhatsApp (abre em nova aba)</span>
+            </a>
+            <a
+              href="#projetos"
+              className="inline-flex min-h-12 items-center justify-center border-b border-rule-strong pb-px text-[0.9375rem] text-ink transition-colors duration-150 hover:border-accent hover:text-accent"
+            >
+              Ver projetos
+            </a>
+          </div>
         </div>
 
-        <div
-          data-reveal
-          style={{ "--reveal-delay": "390ms" } as React.CSSProperties}
-          className="mt-10 flex items-center gap-5 border-t border-line pt-8"
-        >
-          <span className="font-mono text-[0.7rem] tracking-[0.16em] text-muted uppercase">
-            noutros sítios
-          </span>
-          <SocialLinks />
+        <div className="enter-plate lg:col-span-6 lg:col-start-7">
+          <figure className="relative lg:-mr-[calc(var(--gutter)+2.5rem)] xl:-mr-[4rem]">
+            <div className="plate relative aspect-4/5 overflow-hidden sm:aspect-16/10 lg:aspect-4/5">
+              <Image
+                src={photo}
+                alt="Retrato de Flávio Garcia"
+                fill
+                priority
+                placeholder="blur"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
+                className="object-cover object-top"
+              />
+            </div>
+            <figcaption className="mt-3 flex items-baseline justify-between gap-4 border-l border-ink pl-3 text-[0.8125rem] text-ink-3">
+              <span>{profile.name}</span>
+              <span>{profile.role}</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>

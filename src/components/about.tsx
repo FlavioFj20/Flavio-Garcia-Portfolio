@@ -1,66 +1,44 @@
-import { facts } from "@/lib/data";
-import { SectionHeading } from "./section-heading";
+import { about, profile } from "@/lib/data";
 
 export function About() {
   return (
-    <section id="sobre" className="border-t border-line py-20 sm:py-24">
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <SectionHeading
-          eyebrow="Sobre"
-          title="Aprender a construir software com base em problemas reais."
-        />
+    <section id="sobre" className="rule-top">
+      <div className="container grid gap-10 py-[var(--section-y)] lg:grid-cols-12 lg:gap-10">
+        <div className="lg:col-span-4">
+          <p className="section-label">Sobre</p>
+          <h2 className="section-title measure">
+            Formação técnica e prática, lado a lado.
+          </h2>
+        </div>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div
-            data-reveal
-            style={{ "--reveal-delay": "60ms" } as React.CSSProperties}
-            className="flex flex-col gap-5 lg:col-span-7"
-          >
-            <p className="text-base leading-relaxed text-muted-strong">
-              Sou finalista da{" "}
-              <strong className="font-medium text-fg">42 Luanda</strong>, uma
-              escola internacional de programação baseada em aprendizagem prática
-              e peer-to-peer. A formação trabalha primeiro o problema e só depois
-              o código, sem instruções passo a passo e com avaliação por pares.
-            </p>
-
-            <p className="text-base leading-relaxed text-muted-strong">
-              Ao longo do percurso, desenvolvi projetos de software com foco em
-              resolução de problemas, linguagens de baixo nível, algoritmos,
-              estruturas de dados, redes e desenvolvimento de sistemas.
-            </p>
-
-            <p className="text-base leading-relaxed text-muted-strong">
-              Fora da academia, desenvolvi projetos pessoais de software com foco
-              em <strong className="font-medium text-fg">backend</strong> e{" "}
-              <strong className="font-medium text-fg">aplicações web</strong> —
-              interfaces web e aplicações Node.js com persistência local.
-            </p>
-
-            <p className="text-base leading-relaxed text-muted">
-              Procuro oportunidades para transformar conhecimento técnico em
-              soluções reais.
-            </p>
+        <div className="lg:col-span-7 lg:col-start-6">
+          <div className="measure space-y-5 text-[1.0625rem] leading-relaxed text-ink-2">
+            {about.map((paragraph) => (
+              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+            ))}
           </div>
 
-          <dl
-            data-reveal
-            style={{ "--reveal-delay": "140ms" } as React.CSSProperties}
-            className="lg:col-span-5 lg:pt-1"
-          >
-            {facts.map((fact) => (
-              <div
-                key={fact.label}
-                className="border-t border-line py-4 first:border-t-0 first:pt-0"
-              >
-                <dt className="font-mono text-[0.7rem] tracking-[0.18em] text-muted uppercase">
-                  {fact.label}
-                </dt>
-                <dd className="mt-1.5 text-[0.975rem] leading-snug text-fg">
-                  {fact.value}
-                </dd>
-              </div>
-            ))}
+          <dl className="mt-10 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+            <div>
+              <dt className="text-[0.8125rem] text-ink-3">Cargo</dt>
+              <dd className="mt-1 text-[0.9375rem] text-ink">{profile.role}</dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-3">Formação</dt>
+              <dd className="mt-1 text-[0.9375rem] text-ink">
+                Técnico Médio em Informática
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-3">Em formação</dt>
+              <dd className="mt-1 text-[0.9375rem] text-ink">
+                42 Luanda, desde maio de 2025
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-3">Onde estou</dt>
+              <dd className="mt-1 text-[0.9375rem] text-ink">{profile.location}</dd>
+            </div>
           </dl>
         </div>
       </div>
