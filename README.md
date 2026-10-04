@@ -21,11 +21,16 @@ sistemas, infraestrutura e fundamentos de redes.
 | Tema      | Light + dark, tokens CSS, sem flash (`next/script`) |
 
 Sem dependências de UI, sem cliente HTTP, sem bibliotecas de animação. O
-movimento usa CSS — entrada orquestrada no hero, microinterações e
-scroll-driven reveals (`animation-timeline: view()`), incluindo títulos cujas
-palavras partem dos cantos da vista e convergem para o seu lugar à medida que cada
-secção entra no ecrã, sempre com degradação segura e respeito
-por `prefers-reduced-motion`.
+movimento usa CSS — microinterações e uma montagem de texto em que cada palavra
+começa deslocada para um canto (ou para o lado que a secção escolheu) e converge
+para a sua posição. O scroll **dispara** a animação mas não a controla: depois de
+disparada, corre no seu próprio tempo, por isso um scroll rápido ou lento produz
+exatamente o mesmo resultado. No hero as palavras vêm espalhadas pelos quatro
+cantos; abaixo, cada secção entra por um lado fixo que alterna (esquerda, direita,
+esquerda, direita) para o efeito ser uma decisão de design e não ruído. Duração de
+780 ms por palavra com stagger de 70 ms, ou seja, nunca mais do que ~1 s por
+bloco. Sem JavaScript, ou com `prefers-reduced-motion`, nada fica oculto e o
+texto aparece simplesmente como texto.
 
 ## Como executar localmente
 
@@ -75,19 +80,22 @@ src/
 │   ├── experience.tsx  education.tsx  projects.tsx  contact.tsx
 │   ├── site-header.tsx  site-footer.tsx
 │   ├── theme-toggle.tsx                       # alternância de tema, client
-│   ├── reveal-text.tsx                        # título revelado por palavra
+│   ├── reveal-text.tsx                        # montagem palavra a palavra
+│   ├── reveal.tsx                             # montagem por bloco
+│   ├── reveal-observer.tsx                    # o único gatilho, client
 │   └── icons.tsx
 ├── assets/
-│   ├── light.jpeg                             # fotografia (tema claro)
-│   ├── dark.jpeg                              # fotografia (tema escuro)
 │   └── whatsapp-qr.png                        # QR de contacto (mensagem pré-preenchida)
 └── lib/
-    └── data.ts             # todo o conteúdo: perfil, secções, projetos
+    ├── data.ts             # todo o conteúdo: perfil, secções, projetos
+    └── motion.ts           # tempos e direções da montagem de texto
 ```
 
 Todo o conteúdo textual vive em `src/lib/data.ts`, por isso editar textos ou
 trocar links não exige mexer nos componentes. Os únicos client components são
-`site-header.tsx` (menu móvel + secção ativa) e `theme-toggle.tsx`.
+`site-header.tsx` (menu móvel + secção ativa), `theme-toggle.tsx` e
+`reveal-observer.tsx` — este último não anima nada por si, apenas marca cada
+elemento com `is-in` quando ele entra no ecrã; o movimento é todo CSS.
 
 ## Secções
 

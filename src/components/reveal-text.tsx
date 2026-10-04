@@ -1,51 +1,66 @@
 import { Fragment, type CSSProperties } from "react";
+import { stagger, wordOffsets, type Side } from "@/lib/motion";
 
-/* Splits a short string into words, each in its own inline-block span, so the
-   title can assemble as the page is scrolled (see `.reveal-word` in
-   globals.css). Server-rendered: no client JS. The words are laid out exactly
-   like the original text — inline-block boxes separated by real spaces — so
-   line wrapping is unchanged.
+/* Renders a string as individual words, each in its own inline-block span that
+   converges on its resting position when it scrolls into view (see
+   `[data-reveal]` in globals.css). Server component: the trigger is a single
+   observer elsewhere, so this costs no client JS of its own.
 
-   Each word starts pushed out towards a corner (`--rx`/`--ry`, derived from its
-   position in the line: left half swings in from the left, right half from the
-   right; even indices from above, odd from below) and converges to its resting
-   spot as the section scrolls into view. Without scroll-driven animation
-   support, or with reduced motion, the words render as plain text. */
+   `side` is the design decision for the block the text belongs to: every section
+   commits to one side, so the page reads as a planned sequence rather than
+   random motion. The hero uses "spread" — all four corners at once — because it
+   is the one place where the effect can be the whole point.
+
+   `\n` in the text becomes a line break, so an <h1> can keep its two lines while
+   still animating word by word. */
 export function RevealText({
   text,
   as: Tag = "h2",
   className,
+  side = "left",
+  delay = 0,
 }: {
   text: string;
-  as?: "h2" | "h3" | "p";
+  as?: "h1" | "h2" | "h3" | "h4" | "p";
   className?: string;
+  side?: Side;
+  delay?: number;
 }) {
-  const words = text.split(" ");
-  const count = words.length;
-  const center = (count - 1) / 2;
+  const lines = text.split("\n");
+  const total = lines.reduce(
+    (count, line) => count + line.split(" ").filter(Boolean).length,
+    0,
+  );
+  let index = 0;
 
   return (
     <Tag className={className}>
-      {words.map((word, index) => {
-        const edge = center === 0 ? 0 : Math.abs(index - center) / center;
-        const leftSide = index < count / 2;
-        const rx = (leftSide ? -1 : 1) * (0.25 + 0.35 * edge);
-        const ry = (index % 2 === 0 ? -1 : 1) * (0.4 + 0.5 * edge);
-        const style = {
-          "--i": index,
-          "--rx": `${rx.toFixed(2)}em`,
-          "--ry": `${ry.toFixed(2)}em`,
-        } as CSSProperties;
+      {lines.map((line, lineIndex) => (
+        <Fragment key={lineIndex}>
+          {lineIndex > 0 ? <br /> : null}
+          {line
+            .split(" ")
+            .filter(Boolean)
+            .map((word) => {
+              const position = index++;
+              const { rx, ry } = wordOffsets(position, total, side);
+              const style = {
+                "--i": position,
+                "--rx": `${rx}em`,
+                "--ry": `${ry}em`,
+                "--rd": `${delay + stagger(position, total)}ms`,
+              } as CSSProperties;
 
-        return (
-          <Fragment key={`${word}-${index}`}>
-            <span className="reveal-word" style={style}>
-              {word}
-            </span>
-            {index < count - 1 ? " " : null}
-          </Fragment>
-        );
-      })}
+              return (
+                <Fragment key={`${word}-${position}`}>
+                  <span className="reveal-word" data-reveal="" style={style}>
+                    {word}
+                  </span>{" "}
+                </Fragment>
+              );
+            })}
+        </Fragment>
+      ))}
     </Tag>
   );
 }

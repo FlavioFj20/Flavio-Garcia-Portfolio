@@ -1,4 +1,5 @@
 import { academic, projects } from "@/lib/data";
+import { Reveal } from "./reveal";
 import { RevealText } from "./reveal-text";
 
 function RepoLink({ href, name }: { href: string; name: string }) {
@@ -15,13 +16,26 @@ function RepoLink({ href, name }: { href: string; name: string }) {
   );
 }
 
-function Stack({ items }: { items: readonly string[] }) {
+function Stack({
+  items,
+  delay = 0,
+}: {
+  items: readonly string[];
+  delay?: number;
+}) {
   return (
     <ul className="flex flex-wrap gap-x-4 gap-y-1">
-      {items.map((item) => (
-        <li key={item} className="text-[0.875rem] text-ink-3">
+      {items.map((item, index) => (
+        <Reveal
+          key={item}
+          as="li"
+          className="text-[0.875rem] text-ink-3"
+          from="right"
+          distance="1rem"
+          delay={delay + index * 25}
+        >
           {item}
-        </li>
+        </Reveal>
       ))}
     </ul>
   );
@@ -29,7 +43,9 @@ function Stack({ items }: { items: readonly string[] }) {
 
 /* One large project and two smaller ones. Same formal object (the plate),
    different scale. The academic block shows breadth without linking private
-   repositories. */
+   repositories. Right side. The primary project assembles word by word; the two
+   secondary cards travel as one block each, so the hierarchy of the section is
+   also the hierarchy of the motion. */
 export function Projects() {
   const { primary, secondary } = projects;
 
@@ -38,51 +54,78 @@ export function Projects() {
       <div className="container py-[var(--section-y)]">
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <p className="section-label">Projetos</p>
+            <RevealText
+              as="p"
+              className="section-label"
+              text="Projetos"
+              side="right"
+            />
             <RevealText
               as="h2"
               className="section-title measure"
               text="Código aberto, para ler e executar."
+              side="right"
+              delay={70}
             />
           </div>
 
           <div className="lg:col-span-8">
             <article className="plate project-card p-6 sm:p-8">
-              <p className="text-[0.8125rem] text-accent">
+              <Reveal
+                as="p"
+                className="text-[0.8125rem] text-accent"
+                from="right"
+                distance="1.5rem"
+              >
                 {primary.category}
-              </p>
-              <h3 className="mt-2 text-[1.625rem] font-medium text-ink">
-                {primary.name}
-              </h3>
-              <p className="measure mt-4 text-[1.0625rem] leading-relaxed text-ink-2">
-                {primary.summary}
-              </p>
+              </Reveal>
+              <RevealText
+                as="h3"
+                className="mt-2 text-[1.625rem] font-medium text-ink"
+                text={primary.name}
+                side="right"
+                delay={70}
+              />
+              <RevealText
+                as="p"
+                className="measure mt-4 text-[1.0625rem] leading-relaxed text-ink-2"
+                text={primary.summary}
+                side="right"
+                delay={140}
+              />
 
               <ul className="measure mt-6 space-y-2">
-                {primary.detail.map((line) => (
-                  <li
+                {primary.detail.map((line, index) => (
+                  <Reveal
                     key={line}
+                    as="li"
                     className="text-[0.9375rem] leading-relaxed text-ink-2 before:mr-2.5 before:text-rule-strong before:content-['—']"
+                    from="right"
+                    distance="1.25rem"
+                    delay={200 + index * 40}
                   >
                     {line}
-                  </li>
+                  </Reveal>
                 ))}
               </ul>
 
               <div className="mt-7 border-t border-rule pt-5">
-                <Stack items={primary.stack} />
+                <Stack items={primary.stack} delay={280} />
               </div>
 
-              <div className="mt-6">
+              <Reveal className="mt-6" from="right" delay={320}>
                 <RepoLink href={primary.href} name={primary.name} />
-              </div>
+              </Reveal>
             </article>
 
             <div className="mt-6 grid gap-6 sm:grid-cols-2">
-              {secondary.map((project) => (
-                <article
+              {secondary.map((project, index) => (
+                <Reveal
                   key={project.name}
+                  as="article"
                   className="plate project-card flex flex-col p-6"
+                  from="right"
+                  delay={380 + index * 100}
                 >
                   <p className="text-[0.75rem] text-accent">
                     {project.category}
@@ -99,7 +142,7 @@ export function Projects() {
                   <div className="mt-5">
                     <RepoLink href={project.href} name={project.name} />
                   </div>
-                </article>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -107,16 +150,32 @@ export function Projects() {
 
         <div className="mt-16 grid gap-8 border-t border-ink pt-8 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <p className="section-label">{academic.title}</p>
-            <p className="measure mt-3 text-[0.9375rem] leading-relaxed text-ink-2">
-              {academic.lead}
-            </p>
+            <RevealText
+              as="p"
+              className="section-label"
+              text={academic.title}
+              side="right"
+            />
+            <RevealText
+              as="p"
+              className="measure mt-3 text-[0.9375rem] leading-relaxed text-ink-2"
+              text={academic.lead}
+              side="right"
+              delay={70}
+            />
           </div>
           <ul className="flex flex-wrap gap-x-3 gap-y-2 lg:col-span-7 lg:col-start-6">
-            {academic.areas.map((area) => (
-              <li key={area} className="skill-tag">
+            {academic.areas.map((area, index) => (
+              <Reveal
+                key={area}
+                as="li"
+                className="skill-tag"
+                from="right"
+                distance="1.25rem"
+                delay={140 + index * 40}
+              >
                 {area}
-              </li>
+              </Reveal>
             ))}
           </ul>
         </div>

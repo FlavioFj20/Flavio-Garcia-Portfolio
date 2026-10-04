@@ -487,39 +487,6 @@ html[data-theme="dark"] {
     }
   }
 
-  /* --- Entering: the single orchestrated page-load moment ---------------- */
-  .enter {
-    opacity: 0;
-    animation: enter var(--dur) var(--ease-out) forwards;
-  }
-
-  @keyframes enter {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  .enter-plate {
-    opacity: 0;
-    animation: enter-plate 900ms var(--ease-out) 120ms forwards;
-  }
-
-  @keyframes enter-plate {
-    from {
-      opacity: 0;
-      transform: scale(1.03);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
   /* --- Mobile menu: a short, once-only entrance -------------------------- */
   .mobile-menu {
     animation: menu-in 220ms var(--ease-out);
@@ -536,63 +503,43 @@ html[data-theme="dark"] {
     }
   }
 
-  /* --- Reveal: CSS scroll-driven, progressive enhancement only ----------- */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      .reveal {
-        animation: reveal-up linear both;
-        animation-timeline: view();
-        animation-range: entry 8% cover 30%;
-      }
-
-      @keyframes reveal-up {
-        from {
-          opacity: 0;
-          transform: translateY(14px);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-    }
   }
-}
 
-/* --- Word reveal: each section title assembles as it is scrolled into view.
-   Pure CSS (view progress timeline), server-rendered, no client JS. Every word
-   starts offset towards a corner and converges on its resting position as the
-   section passes, so a title appears to be drawn together from the four corners
-   of the viewport rather than simply fading in. `--rx`/`--ry` (set per word by
-   `reveal-text.tsx`) carry the direction, `--i` staggers words on the same line.
-   Without scroll-driven animation support, or with reduced motion, the words
-   simply render as text. Horizontal offsets stay inside the container gutter so
-   the offsets never produce a horizontal scrollbar. */
+/* --- Text assembly: every word converges on its resting position ---------
+   Each `[data-reveal]` element starts pushed out towards a corner or a section
+   side and is pulled in once the observer marks it `is-in`. The animation is
+   time-based, not scroll-scrubbed: scroll decides when it starts, never how far
+   along it is, so the effect reads identically whether the reader flicks the
+   page or crawls through it. `both` keeps the final state applied, which leaves
+   the text perfectly still afterwards.
+
+   The hiding rule is scoped to `html.motion-armed`, added by the observer itself.
+   Until that effect runs — and forever, if JavaScript is unavailable — nothing is
+   hidden and every word renders as plain text. Reduced motion does the same. */
 @layer components {
   .reveal-word {
     display: inline-block;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      .reveal-word {
-        animation: word-assemble linear both;
-        animation-timeline: view();
-        animation-range:
-          entry calc(2% + var(--i, 0) * 1.6%)
-          cover calc(44% + var(--i, 0) * 1.6%);
-      }
+    html.motion-armed [data-reveal] {
+      opacity: 0;
+      transform: translate(var(--rx, 0), var(--ry, 0));
+    }
 
-      @keyframes word-assemble {
-        from {
-          opacity: 0;
-          transform: translate(var(--rx, 0), var(--ry, 0));
-        }
-        to {
-          opacity: 1;
-          transform: translate(0, 0);
-        }
-      }
+    html.motion-armed [data-reveal].is-in {
+      animation: assemble 780ms var(--ease-out) var(--rd, 0ms) both;
+    }
+  }
+
+  @keyframes assemble {
+    from {
+      opacity: 0;
+      transform: translate(var(--rx, 0), var(--ry, 0));
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, 0);
     }
   }
 }
@@ -605,19 +552,13 @@ html[data-theme="dark"] {
 }
 
 /* ==========================================================================
-   Reduced motion — kill entrance and reveal entirely, hand back a static page.
+   Reduced motion — hand back a static page. The assembly effect never hides
+   anything in the first place (its rules live behind `no-preference`), so all
+   that is left is to stop the remaining transitions.
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  .enter,
-  .enter-plate,
-  .reveal {
-    opacity: 1;
-    animation: none;
-    transform: none;
   }
 
   *,

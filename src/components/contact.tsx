@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { contact, profile } from "@/lib/data";
 import { GitHubIcon, LinkedInIcon } from "./icons";
+import { Reveal } from "./reveal";
 import { RevealText } from "./reveal-text";
 import qrCode from "@/assets/whatsapp-qr.png";
 
@@ -10,25 +11,36 @@ const channels = [
   { href: profile.github, label: "GitHub", Icon: GitHubIcon },
 ] as const;
 
+/* Closes the page from the left, the same side About opened on, so the last
+   thing the reader sees completes the circuit. */
 export function Contact() {
   return (
     <section id="contacto" className="bg-band text-band-ink">
       <div className="container py-[var(--section-y)]">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <p className="text-[0.8125rem] font-medium tracking-[0.08em] text-band-accent">
-              Contacto
-            </p>
+            <RevealText
+              as="p"
+              className="text-[0.8125rem] font-medium tracking-[0.08em] text-band-accent"
+              text="Contacto"
+              side="left"
+            />
             <RevealText
               as="h2"
               className="mt-4 max-w-2xl text-[clamp(1.875rem,4.5vw,3rem)] leading-[1.08] font-medium text-band-ink"
               text={contact.title}
+              side="left"
+              delay={70}
             />
-            <p className="measure mt-5 text-[1.0625rem] leading-relaxed text-band-ink/80">
-              {contact.body}
-            </p>
+            <RevealText
+              as="p"
+              className="measure mt-5 text-[1.0625rem] leading-relaxed text-band-ink/80"
+              text={contact.body}
+              side="left"
+              delay={140}
+            />
 
-            <div className="mt-9">
+            <Reveal className="mt-9" from="left" delay={200}>
               <a
                 href={profile.whatsapp}
                 target="_blank"
@@ -38,9 +50,14 @@ export function Contact() {
                 {contact.cta}
                 <span className="sr-only"> no WhatsApp (abre em nova aba)</span>
               </a>
-            </div>
+            </Reveal>
 
-            <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-1 border-t border-band-rule pt-6">
+            <Reveal
+              as="ul"
+              className="mt-10 flex flex-wrap gap-x-8 gap-y-1 border-t border-band-rule pt-6"
+              from="left"
+              delay={260}
+            >
               {channels.map(({ href, label, Icon }) => (
                 <li key={label}>
                   <a
@@ -55,7 +72,7 @@ export function Contact() {
                   </a>
                 </li>
               ))}
-            </ul>
+            </Reveal>
           </div>
 
           {/* The QR code (600x600 PNG, generated with a pre-filled WhatsApp
@@ -65,7 +82,13 @@ export function Contact() {
               stretches to fill the column. The white plate keeps the required
               quiet zone even in the dark theme. */}
           <div className="lg:col-span-4 lg:col-start-9">
-            <figure className="reveal w-fit rounded-md bg-paper p-4">
+            <Reveal
+              as="figure"
+              className="w-fit rounded-md bg-paper p-4"
+              from="left"
+              distance="2rem"
+              delay={320}
+            >
               <Image
                 src={qrCode}
                 alt="Código QR que abre a conversa de WhatsApp com uma mensagem preparada"
@@ -78,7 +101,7 @@ export function Contact() {
               <figcaption className="mt-3 max-w-[11rem] text-[0.8125rem] leading-relaxed text-ink-2">
                 {contact.qrCaption}
               </figcaption>
-            </figure>
+            </Reveal>
           </div>
         </div>
       </div>

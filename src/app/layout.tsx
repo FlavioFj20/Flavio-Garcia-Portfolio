@@ -114,7 +114,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
         <SiteHeader />
 
-        <main id="conteudo" className="flex-1">
+        {/* `overflow-x-clip` contains the assembly effect: a block-level reveal
+            travels far enough sideways to leave the container gutter, and clip
+            keeps that from ever becoming a horizontal scrollbar. Verified that
+            the vertical axis stays `visible`. */}
+        <main id="conteudo" className="flex-1 overflow-x-clip">
           {children}
         </main>
 
