@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { profile } from "@/lib/data";
 import { siteUrl } from "@/lib/site-url";
+import { structuredDataTag } from "@/lib/structured-data";
 
 /* Runs before first paint. Resolves the theme from storage, then from the OS,
    and writes it to <html data-theme> so there is no flash of the wrong theme. */
@@ -32,8 +33,12 @@ const plexSans = IBM_Plex_Sans({
 
 const title = "Flávio Garcia | Software Developer";
 
+/* Kept near 150 characters: Google truncates the snippet past roughly that, so
+   the second half of a longer description is never read. Front-loads the two
+   things a searcher actually types — what he does, and where — then the stack,
+   then availability, which is the call to action the query implies. */
 const description =
-  "Flávio Garcia, Software Developer em Luanda. Desenvolvimento backend e aplicações web em Node.js e TypeScript, com experiência em PHP/MySQL, Linux, Docker e redes de computadores. Disponível para projetos e colaboração.";
+  "Software Developer em Luanda, Angola. APIs e serviços backend em Node.js e TypeScript, com Linux, Docker, bases de dados e redes. Disponível para projetos.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -65,8 +70,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    type: "website",
+    type: "profile",
     locale: "pt_PT",
+    alternateLocale: ["pt_AO"],
     url: "/",
     siteName: `${profile.name} — Portfólio`,
     title,
@@ -76,6 +82,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
+    /* Stated rather than left to the og:image fallback: X only falls back when
+       the tag is absent, and being explicit keeps the card stable if the Open
+       Graph block is ever reordered. */
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
@@ -106,6 +116,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
+
+        {/* schema.org for the person, not just for the page. See
+            src/lib/structured-data.ts for why this is derived and what it
+            deliberately leaves out. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: structuredDataTag() }}
         />
 
         <a
