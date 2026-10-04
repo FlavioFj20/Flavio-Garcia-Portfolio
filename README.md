@@ -5,7 +5,7 @@ Developer em Luanda. Página única, estática, que apresenta o perfil a cliente
 parceiros e recrutadores: desenvolvimento web e backend, bases de dados,
 sistemas, infraestrutura e fundamentos de redes.
 
-**Live:** [https://flavio-portfolio.vercel.app](https://flavio-portfolio.vercel.app)
+**Live:** [https://flaviogarcia-portfolio.vercel.app](https://flaviogarcia-portfolio.vercel.app)
 
 ---
 
@@ -62,7 +62,7 @@ Abre em <http://localhost:3000>.
 Copia `.env.example` para `.env.local` e ajusta o domínio final:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://o-dominio-real.com
+NEXT_PUBLIC_SITE_URL=https://flaviogarcia-portfolio.vercel.app
 ```
 
 É usada em `metadataBase` (Open Graph, canonical), `robots.txt` e
@@ -78,8 +78,8 @@ src/
 │   ├── globals.css           # tokens light/dark, base, componentes, motion
 │   ├── icon.svg              # favicon (claro/escuro)
 │   ├── opengraph-image.tsx   # imagem Open Graph (1200×630, gerada)
-│   ├── robots.ts
-│   └── sitemap.ts
+│   ├── robots.ts             # robots.txt gerado em build
+│   └── sitemap.ts            # sitemap.xml gerado em build
 ├── components/
 │   ├── hero.tsx  about.tsx  capabilities.tsx  networking.tsx
 │   ├── experience.tsx  education.tsx  projects.tsx  contact.tsx
@@ -93,7 +93,8 @@ src/
 │   └── whatsapp-qr.png                        # QR de contacto (mensagem pré-preenchida)
 └── lib/
     ├── data.ts             # todo o conteúdo: perfil, secções, projetos
-    └── motion.ts           # tempos e direções da montagem de texto
+    ├── motion.ts           # tempos e direções da montagem de texto
+    └── site-url.ts         # URL pública do site (canonical, og, robots, sitemap)
 ```
 
 Todo o conteúdo textual vive em `src/lib/data.ts`, por isso editar textos ou
@@ -140,13 +141,14 @@ vercel            # preview
 vercel --prod     # produção
 ```
 
-Define `NEXT_PUBLIC_SITE_URL` para o domínio atribuído.
+`NEXT_PUBLIC_SITE_URL` é opcional: sem ela o build usa o domínio de produção
+que a Vercel injeta. Define-a para um domínio próprio.
 
 **Pela interface**
 
 1. Importa o repositório em <https://vercel.com/new>.
 2. O framework é detetado automaticamente.
-3. Adiciona a variável de ambiente `NEXT_PUBLIC_SITE_URL`.
+3. (Opcional) Adiciona `NEXT_PUBLIC_SITE_URL` se usares um domínio próprio.
 4. Faz deploy.
 
 ## Repositórios apresentados

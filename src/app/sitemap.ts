@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { siteUrl } from "@/lib/site-url";
 
 /* Single-page site, so one entry. `lastModified` is pinned to a constant
    rather than `new Date()` so the route stays byte-identical between builds and

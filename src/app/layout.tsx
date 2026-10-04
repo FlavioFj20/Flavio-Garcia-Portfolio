@@ -5,6 +5,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { profile } from "@/lib/data";
+import { siteUrl } from "@/lib/site-url";
 
 /* Runs before first paint. Resolves the theme from storage, then from the OS,
    and writes it to <html data-theme> so there is no flash of the wrong theme. */
@@ -33,8 +34,6 @@ const title = "Flávio Garcia | Software Developer";
 
 const description =
   "Portfólio de Flávio Garcia, Software Developer de Luanda, com formação em informática, desenvolvimento backend, sistemas, infraestrutura e redes.";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
