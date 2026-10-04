@@ -7,14 +7,15 @@
    live HTTP request. Where a competence comes from a course rather than from
    practice, it is labelled as contact/training and never as a delivered skill. */
 
-/* WhatsApp click-to-chat. This is a short link on purpose: the page never exposes
-   a phone number, not in text, not in metadata, not in the URL.
-   Note: wa.link/f5vghle (with a trailing "e") is a typo that resolves to
-   oops.wa.link — the working link is wa.link/f5vghl. Verified with curl -IL.
+/* WhatsApp click-to-chat, direct to the number. Verified with curl -IL: it 302s to
+   api.whatsapp.com/send/?phone=244953700636&type=phone_number and answers 200.
    Keep this in sync with the QR image at src/assets/whatsapp-qr.png. */
-const whatsappLink = "https://wa.link/f5vghl";
+const whatsappLink = "https://wa.me/244953700636";
+/* Prefill is written from the visitor's side, because that is what WhatsApp sends
+   to me: it has to make sense as the opening line of someone who read the page
+   and wants to work together — not a generic product enquiry. */
 const whatsappMessage =
-  "Olá, Flávio! Vi o seu portfólio e gostaria de falar sobre uma oportunidade.";
+  "Olá, Flávio! Vi o seu portfólio e gostaria de falar sobre um projeto de software.";
 
 export const profile = {
   name: "Flávio Garcia",
@@ -23,6 +24,12 @@ export const profile = {
   github: "https://github.com/FlavioFj20",
   linkedin: "https://ao.linkedin.com/in/fl%C3%A1vio-garcia-1b63aa368",
   whatsapp: `${whatsappLink}?text=${encodeURIComponent(whatsappMessage)}`,
+  /* Factual one-paragraph summary, used as the machine-readable description of
+     the person (schema.org) and of the page. Kept separate from the metadata
+     `description`, which is tuned for a search snippet and carries keywords
+     this one does not need. */
+  summary:
+    "Software Developer em Luanda, Angola. Constrói APIs e serviços backend em Node.js e TypeScript, com base em bases de dados, Linux, containers, infraestrutura e redes de computadores. Está a fazer a formation na 42 Luanda e aceita projetos de desenvolvimento, incluindo trabalho ao nível da rede.",
 } as const;
 
 /* One sentence for the hero. Leads with what I do, not with where I studied. */
@@ -386,35 +393,53 @@ export const school42 = {
   lead: "Entrei em maio de 2025. A formação é baseada em projetos, avaliação por pares e resolução de problemas sem slides: cada etapa só avança quando o projeto funciona.",
   status: [
     { label: "Entrada", value: "Maio de 2025" },
-    { label: "Posição", value: "Cadete" },
+    { label: "Posição", value: "Rank 5" },
     { label: "Agora", value: "A desenvolver o ft_transcendence" },
-    { label: "Depois", value: "1 projeto + 1 exame" },
+    { label: "Depois", value: "O exame final, para rank 6" },
   ],
   capacityNote:
-    "A pergunta que interessa a cada fase não é o que fiz, mas que capacidade me deu.",
+    "A pergunta que interessa a cada órbita não é o que fiz, mas que capacidade me deu.",
   phases: [
     {
-      label: "Fase 1",
-      title: "Fundamentos de C e sistemas",
-      projects: ["Libft", "ft_printf", "get_next_line", "Born2beroot"],
+      label: "Orbit 0",
+      title: "Primeiros programas em C",
+      projects: ["Libft"],
       skills: [
         "C",
         "memória e pointers",
         "file descriptors",
         "Makefile",
         "GNU/Linux",
-        "shell scripting",
       ],
       enables: [
-        "Trabalhar de forma consciente com memória e recursos",
-        "Compilar, automatizar e gerir um ambiente Linux",
+        "Escrever em C e perceber o que a máquina faz com cada byte",
+        "Compilar e automatizar com Makefile",
       ],
       shift:
-        "Deixei de tratar o computador como uma caixa-preta: cada programa passa a ter um custo, um limite e uma intenção.",
+        "O computador deixou de ser uma caixa-preta: cada programa passou a ter um custo, um limite e uma intenção.",
     },
     {
-      label: "Fase 2",
-      title: "Algoritmos, processos e comunicação",
+      label: "Orbit 1",
+      title: "Biblioteca, parsing e o sistema",
+      projects: ["ft_printf", "get_next_line", "born2beroot"],
+      skills: [
+        "biblioteca padrão de C",
+        "formatação e parsing",
+        "permissões de ficheiros",
+        "processos e sinais",
+        "shell scripting",
+        "administração de Linux",
+      ],
+      enables: [
+        "Construir do zero o que normalmente se dá por garantido",
+        "Instalar, configurar e gerir um ambiente Linux",
+      ],
+      shift:
+        "Percebi que “usar a biblioteca” e “escrever a biblioteca” são competências diferentes.",
+    },
+    {
+      label: "Orbit 2",
+      title: "Algoritmos, processos e concorrência",
       projects: [
         "push_swap",
         "so_long",
@@ -425,7 +450,7 @@ export const school42 = {
       skills: [
         "algoritmos e complexidade",
         "estruturas de dados",
-        "signals, pipes e file descriptors",
+        "sinais, pipes e file descriptors",
         "threads, mutexes e sincronização",
         "parsing e gestão de processos",
       ],
@@ -438,28 +463,46 @@ export const school42 = {
         "Aprendi a medir antes de otimizar, e a ler código escrito por outras pessoas.",
     },
     {
-      label: "Fase 3",
-      title: "C++, gráficos e redes",
-      projects: ["NetPractice", "cub3d", "ft_irc", "CPP00–CPP09"],
+      label: "Orbit 3",
+      title: "Rede e gráficos",
+      projects: ["NetPractice", "cub3d", "ft_irc"],
       skills: [
-        "orientação a objetos",
-        "templates e STL",
         "endereçamento IP e subnetting",
         "routing",
         "protocolos de comunicação",
+        "rasters e renderização",
+        "automação de build",
       ],
       enables: [
-        "Estruturar aplicações com OOP, templates e STL",
         "Calcular e interpretar endereçamento IPv4 e sub-redes",
         "Compreender como hosts e serviços comunicam entre si",
+        "Escrever um cliente que desenha e um servidor que aceita ligações",
       ],
       shift:
         "Percebi que rede é, antes de mais, um problema de endereçamento — e só depois um problema de equipamento.",
     },
     {
-      label: "Fase 4",
+      label: "Orbit 4",
+      title: "C++ e orientação a objetos",
+      projects: ["CPP00–CPP09"],
+      skills: [
+        "orientação a objetos",
+        "herança e polimorfismo",
+        "templates e STL",
+        "regras de construção de classes",
+        "exceções e RAII",
+      ],
+      enables: [
+        "Estruturar aplicações com OOP, templates e STL",
+        "Decidir quando a abstração compensa e quando só acrescenta custo",
+      ],
+      shift:
+        "A herança deixou de ser a resposta automática e passou a ser uma escolha com um custo conhecido.",
+    },
+    {
+      label: "Orbit 5",
       title: "Web e infraestrutura",
-      projects: ["Webserv", "Inception", "ft_transcendence — em desenvolvimento"],
+      projects: ["Webserv", "Inception"],
       skills: [
         "HTTP e servidores web",
         "containers e Docker Compose",
@@ -475,6 +518,26 @@ export const school42 = {
       ],
       shift:
         "Um serviço deixou de ser “algo que corre” para ser algo com dependências, rede e estado — e isso muda a forma de o desenhar.",
+    },
+    {
+      label: "Orbit 6",
+      title: "Especialização e exame final",
+      projects: ["ft_transcendence — em desenvolvimento", "Exame final"],
+      skills: [
+        "arquitetura de aplicações",
+        "TypeScript e frameworks de backend",
+        "tempo real com WebSockets",
+        "modelação e relacionamentos",
+        "autenticação e autorização",
+        "documentação de API",
+        "testes",
+      ],
+      enables: [
+        "Conceber e construir uma aplicação completa, do modelo de dados à entrega",
+        "Tocar o exame final e fechar a formation em rank 6",
+      ],
+      shift:
+        "Ainda não é uma conclusão: é o projeto que vai juntar tudo o que sei fazer numa peça que funciona de ponta a ponta.",
     },
   ] satisfies readonly Phase[],
   /* Flagged as the practical infrastructure evidence it is. */
