@@ -22,8 +22,9 @@ sistemas, infraestrutura e fundamentos de redes.
 
 Sem dependências de UI, sem cliente HTTP, sem bibliotecas de animação. O
 movimento usa CSS — entrada orquestrada no hero, microinterações e
-scroll-driven reveals (`animation-timeline: view()`), incluindo títulos que se
-organizam palavra a palavra ao scroll, sempre com degradação segura e respeito
+scroll-driven reveals (`animation-timeline: view()`), incluindo títulos cujas
+palavras partem dos cantos da vista e convergem para o seu lugar à medida que cada
+secção entra no ecrã, sempre com degradação segura e respeito
 por `prefers-reduced-motion`.
 
 ## Como executar localmente

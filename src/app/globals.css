@@ -559,11 +559,15 @@ html[data-theme="dark"] {
   }
 }
 
-/* --- Word reveal: section titles assemble word by word as they scroll in.
-   Pure CSS (view progress timeline), server-rendered, no client JS. The
-   per-word `--i` offset staggers words that share a line. If the browser
-   cannot take an `animation-range` with `calc`, the keyframe still resolves to
-   the final state, so the title is never left hidden. */
+/* --- Word reveal: each section title assembles as it is scrolled into view.
+   Pure CSS (view progress timeline), server-rendered, no client JS. Every word
+   starts offset towards a corner and converges on its resting position as the
+   section passes, so a title appears to be drawn together from the four corners
+   of the viewport rather than simply fading in. `--rx`/`--ry` (set per word by
+   `reveal-text.tsx`) carry the direction, `--i` staggers words on the same line.
+   Without scroll-driven animation support, or with reduced motion, the words
+   simply render as text. Horizontal offsets stay inside the container gutter so
+   the offsets never produce a horizontal scrollbar. */
 @layer components {
   .reveal-word {
     display: inline-block;
@@ -572,21 +576,21 @@ html[data-theme="dark"] {
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .reveal-word {
-        animation: word-rise linear both;
+        animation: word-assemble linear both;
         animation-timeline: view();
         animation-range:
-          entry calc(6% + var(--i, 0) * 2.4%)
-          cover calc(34% + var(--i, 0) * 2.4%);
+          entry calc(2% + var(--i, 0) * 1.6%)
+          cover calc(44% + var(--i, 0) * 1.6%);
       }
 
-      @keyframes word-rise {
+      @keyframes word-assemble {
         from {
           opacity: 0;
-          transform: translateY(0.5em);
+          transform: translate(var(--rx, 0), var(--ry, 0));
         }
         to {
           opacity: 1;
-          transform: none;
+          transform: translate(0, 0);
         }
       }
     }
