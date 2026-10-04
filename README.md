@@ -125,20 +125,21 @@ dígito — `#42` funciona para o browser mas é um selector inválido.)
 
 ## Contacto
 
-O contacto principal é o WhatsApp, via click-to-chat para um short link
-(`wa.link/f5vghl`), já com uma mensagem pré-preenchida definida em
+O contacto principal é o WhatsApp, via click-to-chat direto para o número
+(`wa.me/244953700636`), já com uma mensagem pré-preenchida definida em
 `src/lib/data.ts`. O mesmo link é codificado no QR
 (`src/assets/whatsapp-qr.png`).
 
-O número de telefone não aparece em lado nenhum: nem no HTML, nem nos metadados,
-nem no repositório. O QR e os botões usam sempre o short link.
+A mensagem é escrita do lado de quem escreve — é isso que o WhatsApp envia para
+o número — e por isso tem de fazer sentido como primeira linha de quem leu a
+página e quer trabalhar em conjunto.
 
 Ao alterar a mensagem, regenera o QR com o link completo já codificado
 (o mesmo valor de `profile.whatsapp`):
 
 ```bash
 npx qrcode -o src/assets/whatsapp-qr.png -w 600 -q 4 -e Q \
-  "https://wa.link/f5vghl?text=<mensagem-url-encoded>"
+  "https://wa.me/244953700636?text=<mensagem-url-encoded>"
 ```
 
 ## Deploy na Vercel
