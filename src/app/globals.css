@@ -505,13 +505,20 @@ html[data-theme="dark"] {
 
   }
 
-/* --- Text assembly: every word converges on its resting position ---------
-   Each `[data-reveal]` element starts pushed out towards a corner or a section
-   side and is pulled in once the observer marks it `is-in`. The animation is
-   time-based, not scroll-scrubbed: scroll decides when it starts, never how far
-   along it is, so the effect reads identically whether the reader flicks the
-   page or crawls through it. `both` keeps the final state applied, which leaves
-   the text perfectly still afterwards.
+/* --- Text assembly: text converges while it is on screen ----------------
+   Each `[data-reveal]` element rests pushed out towards a corner or towards its
+   section's side, and `.is-in` pulls it in. The observer adds that class while
+   the element is on screen and takes it away again when the element leaves — in
+   either scroll direction — so the text assembles on the way in and disperses
+   on the way out, and does so again on the next pass.
+
+   Transitions rather than keyframes, deliberately: a transition can be
+   interrupted and reversed mid-flight, so changing your mind halfway through a
+   scroll never snaps. Time-based, not scroll-scrubbed — scroll decides *when* the
+   movement starts, never how far along it is, so a flick and a crawl look the
+   same. Entering is staggered per word and slower (780ms); leaving is quicker
+   (420ms) and undelayed, so a departing block dissolves as one clean gesture
+   instead of unwinding word by word.
 
    The hiding rule is scoped to `html.motion-armed`, added by the observer itself.
    Until that effect runs — and forever, if JavaScript is unavailable — nothing is
@@ -525,21 +532,17 @@ html[data-theme="dark"] {
     html.motion-armed [data-reveal] {
       opacity: 0;
       transform: translate(var(--rx, 0), var(--ry, 0));
+      transition-property: opacity, transform;
+      transition-duration: 420ms;
+      transition-timing-function: var(--ease-out);
+      transition-delay: 0ms;
     }
 
     html.motion-armed [data-reveal].is-in {
-      animation: assemble 780ms var(--ease-out) var(--rd, 0ms) both;
-    }
-  }
-
-  @keyframes assemble {
-    from {
-      opacity: 0;
-      transform: translate(var(--rx, 0), var(--ry, 0));
-    }
-    to {
       opacity: 1;
       transform: translate(0, 0);
+      transition-duration: 780ms;
+      transition-delay: var(--rd, 0ms);
     }
   }
 }

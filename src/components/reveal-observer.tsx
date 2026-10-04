@@ -2,19 +2,25 @@
 
 import { useEffect } from "react";
 
-/* The only client-side piece of the assembly effect, and deliberately dumb: it
-   watches every `[data-reveal]` element and adds `is-in` the first time that
-   element is genuinely on screen. The animation itself is CSS and plays on its
-   own clock, so scrolling faster or slower changes nothing about how it looks —
-   scroll only decides *when* it starts.
+/* The only client-side piece of the text assembly, and deliberately dumb: it
+   toggles one class per element according to whether that element is on screen.
 
-   Each element is unobserved after it fires, so the text settles and stays
-   perfectly still, and a reader who scrolls back and forth never re-triggers
-   anything.
+   `.is-in` means assembled. The observer adds it on the way down and removes it
+   on the way up, so text gathers as it enters and lets go as it leaves, and
+   gathers again on the next pass in either direction. The movement itself is CSS
+   and runs on its own clock — scroll decides only when it starts, so a flick and
+   a crawl produce the same motion.
 
-   `motion-armed` on <html> is what hides anything, and it is set here rather
-   than by an inline script: until this effect runs, nothing is hidden, so there
-   is no window where text is painted, then covered, then animated in. */
+   Two details that matter:
+
+   - The first screen is assembled synchronously, in the same frame that arms the
+     effect, so there is no flash of hidden text before the entrance begins.
+   - Entry and exit use different thresholds (15% and 2% visible). A single
+     threshold makes text at the boundary flicker between the two states while
+     scrolling slowly; the gap makes the switch decisive.
+
+   `motion-armed` on <html> is what hides anything, and it is set here rather than
+   by an inline script: with no JavaScript at all, nothing is ever hidden. */
 export function RevealObserver() {
   useEffect(() => {
     const nodes = Array.from(
@@ -24,51 +30,49 @@ export function RevealObserver() {
     if (nodes.length === 0) return;
 
     const root = document.documentElement;
+
+    const show = (node: Element) => node.classList.add("is-in");
+    const hide = (node: Element) => node.classList.remove("is-in");
+
+    for (const node of nodes) {
+      if (node.getBoundingClientRect().top <= window.innerHeight * 0.88) {
+        show(node);
+      }
+    }
+
     root.classList.add("motion-armed");
-
-    const pending = new Set(nodes);
-    let observer: IntersectionObserver | undefined;
-
-    const show = (node: Element) => {
-      node.classList.add("is-in");
-      pending.delete(node as HTMLElement);
-      observer?.unobserve(node);
-    };
 
     if (typeof IntersectionObserver === "undefined") {
       for (const node of nodes) show(node);
-    } else {
-      observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) show(entry.target);
-          }
-        },
-        { threshold: 0.1, rootMargin: "0px 0px -8% 0px" },
-      );
-
-      for (const node of nodes) observer.observe(node);
+      return () => root.classList.remove("motion-armed");
     }
 
-    /* An anchor link, a restored scroll position or find-in-page can move the
-       viewport past a section without it ever intersecting — those words would
-       stay invisible for good. This sweep reveals whatever the reader has
-       already scrolled past, and retires itself once nothing is pending. */
-    const sweep = window.setInterval(() => {
-      if (pending.size === 0) {
-        window.clearInterval(sweep);
-        return;
-      }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const { intersectionRatio: ratio, boundingClientRect } = entry;
 
-      const line = window.innerHeight * 0.92;
-      for (const node of Array.from(pending)) {
-        if (node.getBoundingClientRect().top <= line) show(node);
-      }
-    }, 250);
+          /* A block taller than most of the viewport can never reach 15%
+             visibility — judging it by ratio alone would leave it hidden for
+             good. Big blocks therefore only have to be on screen at all; the
+             ratio thresholds stay for words, where they give the hysteresis that
+             stops text flickering while it sits on a boundary. */
+          const tall = boundingClientRect.height > window.innerHeight * 0.6;
+
+          if (!entry.isIntersecting || (ratio < 0.02 && !tall)) {
+            hide(entry.target);
+          } else if (tall || ratio >= 0.15) {
+            show(entry.target);
+          }
+        }
+      },
+      { threshold: [0, 0.02, 0.15], rootMargin: "0px 0px -8% 0px" },
+    );
+
+    for (const node of nodes) observer.observe(node);
 
     return () => {
-      observer?.disconnect();
-      window.clearInterval(sweep);
+      observer.disconnect();
       root.classList.remove("motion-armed");
     };
   }, []);
