@@ -29,8 +29,13 @@ exatamente o mesmo resultado. No hero as palavras vêm espalhadas pelos quatro
 cantos; abaixo, cada secção entra por um lado fixo que alterna (esquerda, direita,
 esquerda, direita) para o efeito ser uma decisão de design e não ruído. Duração de
 780 ms por palavra com stagger de 70 ms, ou seja, nunca mais do que ~1 s por
-bloco. Sem JavaScript, ou com `prefers-reduced-motion`, nada fica oculto e o
-texto aparece simplesmente como texto.
+bloco. O movimento é reversível: o texto junta-se ao entrar no ecrã e separa-se
+ao sair, repetindo a cada passagem, tanto a descer como a subir. Por isso é feito
+com transições e não com keyframes — assim pode ser interrompido a meio e
+invertido sem salto. A entrada demora 780 ms escalonada; a saída demora 420 ms sem
+atraso, para o bloco desfazer num gesto limpo. Sem JavaScript, ou com
+`prefers-reduced-motion`, nada fica oculto e o texto aparece simplesmente como
+texto.
 
 ## Como executar localmente
 
@@ -94,8 +99,8 @@ src/
 Todo o conteúdo textual vive em `src/lib/data.ts`, por isso editar textos ou
 trocar links não exige mexer nos componentes. Os únicos client components são
 `site-header.tsx` (menu móvel + secção ativa), `theme-toggle.tsx` e
-`reveal-observer.tsx` — este último não anima nada por si, apenas marca cada
-elemento com `is-in` quando ele entra no ecrã; o movimento é todo CSS.
+`reveal-observer.tsx` — este último não anima nada por si, apenas alterna a classe
+`is-in` de cada elemento conforme ele está ou não no ecrã; o movimento é todo CSS.
 
 ## Secções
 
