@@ -487,6 +487,237 @@ html[data-theme="dark"] {
     }
   }
 
+  /* --- Numbered editorial row (services, phases) -------------------------
+     Not a card: a hairline above, an index in the margin. The page already has
+     the plate as its one repeated object; rows keep the rhythm without adding a
+     second shape language. */
+  .row-index {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    line-height: 1;
+    /* ink-3, not rule-strong: this is text, and rule-strong sits near 2:1. */
+    color: var(--color-ink-3);
+  }
+
+  /* --- Qualifier chips: the page must never blur "pratiquei" and
+         "estive em formação". Same shape as .skill-tag, quieter, and the
+     training variant is explicitly outlined rather than filled. */
+  .qualifier {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.4rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+    white-space: nowrap;
+  }
+
+  .qualifier[data-level="praticado"] {
+    border-color: color-mix(in oklab, var(--color-accent) 55%, transparent);
+    color: var(--color-accent);
+  }
+
+  /* --- Subnet map: one small diagram, and it is literally subnetting.
+     A /24 split into two /25s, drawn with hairlines. Quiet, technical, and it
+     carries meaning instead of decorating. */
+  .netmap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    border-top: 1px solid var(--color-rule);
+    border-bottom: 1px solid var(--color-rule);
+    padding-block: 1rem;
+  }
+
+  .netmap-node {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8125rem;
+    color: var(--color-ink-2);
+  }
+
+  .netmap-node[data-role="parent"] {
+    color: var(--color-ink);
+  }
+
+  .netmap-caption {
+    flex-basis: 100%;
+    font-size: 0.75rem;
+    color: var(--color-ink-3);
+  }
+
+  /* The connection lines draw in once, over the accent, as the diagram scrolls
+     into view. Only where scroll-driven animation exists; everywhere else the
+     line is simply there. */
+  .netmap-wire {
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background-color: var(--color-rule-strong);
+    transform-origin: left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .netmap-wire {
+        animation: wire-draw linear both;
+        animation-timeline: view();
+        animation-range: entry 20% cover 45%;
+      }
+
+      @keyframes wire-draw {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(1);
+        }
+      }
+    }
+  }
+
+  /* --- Progression chain (networking origin -> maturity) ----------------
+     Six short steps with connectors, not a dated chronology. */
+  .chain {
+    display: grid;
+    gap: 0;
+    counter-reset: chain;
+  }
+
+  .chain-step {
+    position: relative;
+    padding: 0.55rem 0 0.55rem 1.25rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-2);
+  }
+
+  .chain-step::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    border: 1px solid var(--color-accent);
+    background-color: var(--color-paper);
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .chain-step-last {
+    color: var(--color-ink);
+  }
+
+  .chain-step-last::before {
+    background-color: var(--color-accent);
+  }
+
+  /* --- Phase rail (42 Luanda) --------------------------------------------
+     Same object as .timeline, weighted for a longer sequence: a rail that fills
+     with the accent as it is scrolled through, a diamond per phase, and the
+     phase in progress carrying a filled marker so the current position is
+     legible without reading a word. */
+  .phase-rail {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .phase-rail::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background-color: var(--color-rule);
+  }
+
+  .phase {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+
+  .phase:last-child {
+    padding-bottom: 0;
+  }
+
+  .phase::before {
+    content: "";
+    position: absolute;
+    left: -1.75rem;
+    top: 0.55rem;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--color-ink);
+    background-color: var(--color-paper);
+    transform: translateX(-4px) rotate(45deg);
+  }
+
+  .phase-current::before {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 18%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .phase-rail::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+        width: 1px;
+        height: calc(100% - 1rem);
+        background-color: var(--color-accent);
+        transform-origin: top;
+        animation: timeline-grow linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 55%;
+      }
+    }
+  }
+
+  /* --- The "agora" flag: one small accent marker, used once per page ----- */
+  .flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  .flag::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  /* --- Pull quote: the mindset line, in the display serif and set apart from
+     the capability lists around it. */
+  .pull {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 0.9rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+
+  /* --- Scope note: the line that says what is NOT promised -------------- */
+  .scope-note {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-ink-3);
+  }
+
   /* --- Mobile menu: a short, once-only entrance -------------------------- */
   .mobile-menu {
     animation: menu-in 220ms var(--ease-out);

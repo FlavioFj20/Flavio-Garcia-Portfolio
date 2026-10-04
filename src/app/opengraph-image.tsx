@@ -42,8 +42,8 @@ export default function OpengraphImage() {
               lineHeight: 1.35,
             }}
           >
-            Desenvolvimento de software, backend, sistemas, infraestrutura e
-            redes de computadores.
+            Backend e aplicações web em Node.js e TypeScript, com bases de dados,
+            Docker, Linux e redes.
           </div>
         </div>
 
@@ -51,13 +51,15 @@ export default function OpengraphImage() {
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             borderTop: "1px solid #d5d8d0",
             paddingTop: 26,
             fontSize: 22,
             color: "#6b716c",
           }}
         >
-          github.com/FlavioFj20
+          <span>github.com/FlavioFj20</span>
+          <span>Disponível para projetos e colaboração</span>
         </div>
       </div>
     ),

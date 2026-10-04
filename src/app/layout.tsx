@@ -33,7 +33,7 @@ const plexSans = IBM_Plex_Sans({
 const title = "Flávio Garcia | Software Developer";
 
 const description =
-  "Portfólio de Flávio Garcia, Software Developer de Luanda, com formação em informática, desenvolvimento backend, sistemas, infraestrutura e redes.";
+  "Flávio Garcia, Software Developer em Luanda. Desenvolvimento backend e aplicações web em Node.js e TypeScript, com experiência em PHP/MySQL, Linux, Docker e redes de computadores. Disponível para projetos e colaboração.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -50,9 +50,13 @@ export const metadata: Metadata = {
     "Software Developer",
     "Desenvolvedor de software",
     "Backend",
-    "NestJS",
     "Node.js",
+    "TypeScript",
+    "NestJS",
+    "APIs REST",
     "Bases de dados",
+    "PostgreSQL",
+    "MySQL",
     "Linux",
     "Docker",
     "Redes de computadores",

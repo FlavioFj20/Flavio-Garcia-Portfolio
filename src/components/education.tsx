@@ -2,10 +2,10 @@ import { complementary, education } from "@/lib/data";
 import { Reveal } from "./reveal";
 import { RevealText } from "./reveal-text";
 
-/* A compact timeline. Técnico Médio comes first and 42 sits within the same
-   sequence, so the two read as complementary steps rather than 42 as the
-   headline. Complementary study follows as a quiet editorial list. Left side,
-   alternating back. */
+/* A compact timeline, now holding only what 42's own section does not: the
+   technical course that is the broad base, and the corporate-networks training
+   that the networking section leans on. Complementary study follows as a quiet
+   editorial list. Right side, alternating back. */
 export function Education() {
   return (
     <section id="formacao" className="rule-top">
@@ -16,13 +16,13 @@ export function Education() {
               as="p"
               className="section-label"
               text="Formação"
-              side="left"
+              side="right"
             />
             <RevealText
               as="h2"
               className="section-title measure"
-              text="Duas bases, um mesmo percurso."
-              side="left"
+              text="A base técnica por trás disto."
+              side="right"
               delay={70}
             />
           </div>
@@ -34,7 +34,7 @@ export function Education() {
                   key={entry.org}
                   as="li"
                   className="timeline-item"
-                  from="left"
+                  from="right"
                   delay={index * 90}
                 >
                   <p className="tabular text-[0.8125rem] text-ink-3">
@@ -58,7 +58,7 @@ export function Education() {
                 as="h3"
                 className="text-[0.9375rem] font-medium text-ink"
                 text="Formação complementar"
-                side="left"
+                side="right"
                 delay={200}
               />
               <ul className="mt-4">
@@ -67,7 +67,7 @@ export function Education() {
                     key={item}
                     as="li"
                     className="border-b border-rule py-2.5 text-[0.9375rem] text-ink-2"
-                    from="left"
+                    from="right"
                     distance="1.5rem"
                     delay={260 + index * 40}
                   >

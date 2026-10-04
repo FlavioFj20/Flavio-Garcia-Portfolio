@@ -12,7 +12,12 @@ const channels = [
 ] as const;
 
 /* Closes the page from the left, the same side About opened on, so the last
-   thing the reader sees completes the circuit. */
+   thing the reader sees completes the circuit.
+
+   This is the second entry point to the same offer the services section makes:
+   WhatsApp primary, with LinkedIn and GitHub beside it for people who would
+   rather look at the code or the profile first. No phone number anywhere — the
+   link and the QR both go through the same short link. */
 export function Contact() {
   return (
     <section id="contacto" className="bg-band text-band-ink">
@@ -22,7 +27,7 @@ export function Contact() {
             <RevealText
               as="p"
               className="text-[0.8125rem] font-medium tracking-[0.08em] text-band-accent"
-              text="Contacto"
+              text={contact.eyebrow}
               side="left"
             />
             <RevealText
@@ -73,10 +78,15 @@ export function Contact() {
                 </li>
               ))}
             </Reveal>
+
+            <p className="mt-8 max-w-md text-[0.8125rem] leading-relaxed text-band-ink/60">
+              Também disponível para colaboração, trabalho em equipa e
+              oportunidades profissionais.
+            </p>
           </div>
 
-          {/* The QR code (600x600 PNG, generated with a pre-filled WhatsApp
-              message — see src/lib/data.ts). Served unoptimized: Next's
+          {/* The QR code (600x600 PNG, generated from the same short link as the
+              button above — see src/lib/data.ts). Served unoptimized: Next's
               resampling would soften the module edges and make it harder to
               scan. Sized off the caption so it scales with the type but never
               stretches to fill the column. The white plate keeps the required

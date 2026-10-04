@@ -1,4 +1,4 @@
-import { academic, projects } from "@/lib/data";
+import { projects } from "@/lib/data";
 import { Reveal } from "./reveal";
 import { RevealText } from "./reveal-text";
 
@@ -41,11 +41,19 @@ function Stack({
   );
 }
 
-/* One large project and two smaller ones. Same formal object (the plate),
-   different scale. The academic block shows breadth without linking private
-   repositories. Right side. The primary project assembles word by word; the two
-   secondary cards travel as one block each, so the hierarchy of the section is
-   also the hierarchy of the motion. */
+/* Six repositories, chosen to cover the areas the page claims rather than to fill
+   a grid: backend and APIs, systems and data modelling, web with PHP/MySQL, a
+   Node.js foundation, and a command-line tool. Every description was read against
+   the repository itself.
+
+   Each entry keeps its provenance visible in a short note — internship work, a
+   course project — because a portfolio that hides where something came from is
+   worth less, not more.
+
+   One large plate and five smaller ones: same formal object, different scale. The
+   primary project assembles word by word; the smaller cards travel as one block
+   each, so the hierarchy of the section is also the hierarchy of the motion.
+   Right side. */
 export function Projects() {
   const { primary, secondary } = projects;
 
@@ -67,6 +75,13 @@ export function Projects() {
               side="right"
               delay={70}
             />
+            <RevealText
+              as="p"
+              className="measure mt-5 text-[1.0625rem] leading-relaxed text-ink-2"
+              text="Os repositórios que mostram melhor o que faço: backend, sistemas de gestão, web e ferramentas de linha de comandos."
+              side="right"
+              delay={140}
+            />
           </div>
 
           <div className="lg:col-span-8">
@@ -81,7 +96,7 @@ export function Projects() {
               </Reveal>
               <RevealText
                 as="h3"
-                className="mt-2 text-[1.625rem] font-medium text-ink"
+                className="mt-2 text-[1.625rem] font-medium break-words text-ink"
                 text={primary.name}
                 side="right"
                 delay={70}
@@ -125,7 +140,7 @@ export function Projects() {
                   as="article"
                   className="plate project-card flex flex-col p-6"
                   from="right"
-                  delay={380 + index * 100}
+                  delay={300 + index * 55}
                 >
                   <p className="text-[0.75rem] text-accent">
                     {project.category}
@@ -136,9 +151,28 @@ export function Projects() {
                   <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-ink-2">
                     {project.summary}
                   </p>
+
+                  <ul className="measure mt-4 space-y-1.5">
+                    {project.detail.map((line) => (
+                      <li
+                        key={line}
+                        className="text-[0.875rem] leading-relaxed text-ink-2 before:mr-2 before:text-rule-strong before:content-['—']"
+                      >
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+
                   <div className="mt-5 border-t border-rule pt-4">
                     <Stack items={project.stack} />
                   </div>
+
+                  {project.note ? (
+                    <p className="mt-4 text-[0.75rem] leading-relaxed text-ink-3 italic">
+                      {project.note}
+                    </p>
+                  ) : null}
+
                   <div className="mt-5">
                     <RepoLink href={project.href} name={project.name} />
                   </div>
@@ -146,38 +180,6 @@ export function Projects() {
               ))}
             </div>
           </div>
-        </div>
-
-        <div className="mt-16 grid gap-8 border-t border-ink pt-8 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <RevealText
-              as="p"
-              className="section-label"
-              text={academic.title}
-              side="right"
-            />
-            <RevealText
-              as="p"
-              className="measure mt-3 text-[0.9375rem] leading-relaxed text-ink-2"
-              text={academic.lead}
-              side="right"
-              delay={70}
-            />
-          </div>
-          <ul className="flex flex-wrap gap-x-3 gap-y-2 lg:col-span-7 lg:col-start-6">
-            {academic.areas.map((area, index) => (
-              <Reveal
-                key={area}
-                as="li"
-                className="skill-tag"
-                from="right"
-                distance="1.25rem"
-                delay={140 + index * 40}
-              >
-                {area}
-              </Reveal>
-            ))}
-          </ul>
         </div>
       </div>
     </section>

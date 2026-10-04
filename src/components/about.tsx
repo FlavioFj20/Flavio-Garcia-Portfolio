@@ -9,9 +9,12 @@ const facts = [
   { label: "Onde estou", value: "Luanda, Angola" },
 ] as const;
 
-/* Section 2. Everything here enters from the left; Capabilities answers from the
+/* Section 2. Everything here enters from the left; Services answers from the
    right. The rhythm alternates down the page so the effect reads as a decision
-   rather than a default. */
+   rather than a default.
+
+   The copy answers "what can this person do" before "where did they learn it" —
+   the last paragraph is the one line of personality the page allows itself. */
 export function About() {
   return (
     <section id="sobre" className="rule-top">

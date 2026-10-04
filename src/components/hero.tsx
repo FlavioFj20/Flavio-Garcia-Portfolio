@@ -5,7 +5,12 @@ import { RevealText } from "./reveal-text";
 /* No photograph: the copy is the whole first screen and gets the full measure.
    The hero is also the one place the assembly effect spreads from all four
    corners, because here the text arriving *is* the impression. Every section
-   below commits to a single side instead, so the page reads as a sequence. */
+   below commits to a single side instead, so the page reads as a sequence.
+
+   The headline is the role, not the school: "Software Developer" is what I can
+   be hired for. The focus list underneath is what carries the breadth — seven
+   areas, so the profile visibly crosses software, data, systems and networks
+   rather than sitting in one lane. */
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-x-clip">
@@ -32,13 +37,6 @@ export function Hero() {
             side="spread"
           />
 
-          <RevealText
-            as="p"
-            className="measure mt-4 text-[1.0625rem] leading-relaxed text-ink-2"
-            text="Gosto de perceber o problema antes da solução e de construir com consciência do que acontece por baixo da abstração."
-            side="spread"
-          />
-
           <Reveal
             className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3"
             from="left"
@@ -54,8 +52,8 @@ export function Hero() {
               Fale comigo
               <span className="sr-only"> no WhatsApp (abre em nova aba)</span>
             </a>
-            <a href="#projetos" className="text-link">
-              Ver projetos
+            <a href="#servicos" className="text-link">
+              O que posso construir
             </a>
           </Reveal>
 
